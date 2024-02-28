@@ -20,7 +20,7 @@ class _MyWidgetState extends State<Login> {
         debugShowCheckedModeBanner: true,
         home: SafeArea(
           child: Scaffold(
-            appBar: AppBar(title: const Text(appTitle), backgroundColor: green1),
+            appBar: AppBar(title: const Text(appTitle), backgroundColor: yellowcustom),
             body: const SingleChildScrollView(
                 child: Column(
               children: [

@@ -1,18 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:orderez/Widget/TextFieldComponent.dart';
+import 'package:orderez/Widget/ButtonLogs.dart';
+import 'package:orderez/theme.dart';
+import 'package:orderez/view/Pesanan.dart';
 
 class LoginUser extends StatefulWidget {
-  const LoginUser({super.key});
+  LoginUser({super.key});
+
+  // text editing controller
 
   @override
   State<LoginUser> createState() => _LoginUserState();
 }
 
 class _LoginUserState extends State<LoginUser> {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  // Function toPesanan = () => {};
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    return Material(
+      child: Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+          colors: [yellowcustom, Colors.white],
+          stops: [0.1, 0.50],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        )),
         child: Center(
           child: (Column(
             children: [
@@ -55,41 +73,27 @@ class _LoginUserState extends State<LoginUser> {
               const SizedBox(
                 height: 30,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [Text('Username')],
-                ),
+              TextFieldComponent(
+                controller: usernameController,
+                obscure: false,
+                hinttxt: 'Username',
+                icon: const Icon(Icons.person),
               ),
-              const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: TextField(
-                    decoration: InputDecoration(
-                        // icon: Icon(Icons.person),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.cyan)),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.cyan)),
-                        prefixIcon: Icon(Icons.person)),
-                  ))
+              const SizedBox(height: 25),
+              TextFieldComponent(
+                controller: passwordController,
+                obscure: true,
+                hinttxt: 'Password',
+                icon: const Icon(Icons.lock),
+              ),
+              const SizedBox(
+                height: 70,
+              ),
+              const ButtonLogs()
             ],
           )),
         ),
       ),
     );
-  }
-}
-
-class TextfieldLogin extends StatelessWidget {
-  const TextfieldLogin({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-        child: Column(children: [
-      Text('Username'),
-      // TextField(),
-      Text('Password'),
-    ]));
   }
 }
