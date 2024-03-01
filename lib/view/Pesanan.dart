@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:orderez/Widget/DrawerComponent.dart';
 import 'package:orderez/Widget/ListTileComponent.dart';
 import 'package:orderez/view/ListMenu.dart';
 import 'package:orderez/pages/PagePesanan.dart';
@@ -19,7 +20,7 @@ class _PesananState extends State<Pesanan> {
           Tab(text: 'Dikonfirmasi'),
         ],
         labelColor: Colors.black,
-        indicatorColor: Colors.yellow,
+        indicatorColor: Colors.black,
       );
   @override
   Widget build(BuildContext context) {
@@ -35,84 +36,18 @@ class _PesananState extends State<Pesanan> {
                 padding: EdgeInsets.symmetric(horizontal: 84),
                 child: Text(
                   'Pesanan',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 )),
             bottom: PreferredSize(
               preferredSize: _tabBar.preferredSize,
               child: Material(
-                color: const Color.fromARGB(255, 246, 246, 246),
+                color: const Color.fromARGB(255, 255, 206, 64),
                 child: _tabBar,
               ),
             ),
           ),
-          drawer: Drawer(
-            backgroundColor: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(
-                  height: 200.0,
-                  child: DrawerHeader(
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 229, 175, 16),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.person,
-                            size: 90,
-                          ),
-                          Text(
-                            'Gua Admin',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    children: [
-                      ListtilComponent(
-                        selected: true,
-                        name: 'Pesanan',
-                        icons: Icon(Icons.note_alt_rounded),
-                        destination: Pesanan(),
-                      ),
-                      ListtilComponent(
-                        selected: false,
-                        name: 'List Menu',
-                        icons: Icon(Icons.menu_book_rounded),
-                        destination: ListMenu(),
-                      ),
-                    ],
-                  ),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: const Text('Logout'),
-                  onTap: () {
-                    // Handle logout action
-                    Navigator.pop(context);
-                  },
-                ),
-                const SizedBox(
-                  height: 100,
-                )
-              ],
-            ),
-          ),
+          drawer: DrawerComponent(nums: 1),
           body: const TabBarView(children: [
             PagePesanan(),
             PlaceholderPage(),

@@ -18,7 +18,7 @@ class ListtilComponent extends StatelessWidget {
     return ListTile(
       leading: icons,
       selected: selected,
-      selectedColor: Colors.amber,
+      selectedColor: const Color.fromARGB(255, 204, 154, 3),
       title: Text(name),
       // selected: _selectedIndex == 0,
       onTap: () {

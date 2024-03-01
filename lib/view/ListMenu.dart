@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:orderez/Widget/DrawerComponent.dart';
 
 class ListMenu extends StatefulWidget {
   const ListMenu({super.key});
@@ -8,7 +9,7 @@ class ListMenu extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<ListMenu> {
-  TabBar get _tabBar => const TabBar(
+  TabBar get _tabBar => TabBar(
         tabs: [
           Tab(text: 'Makanan'),
           Tab(text: 'Minuman'),
@@ -16,7 +17,12 @@ class _MyWidgetState extends State<ListMenu> {
           Tab(text: 'Steak'),
         ],
         labelColor: Colors.black,
-        indicatorColor: Colors.yellow,
+        indicatorColor: Colors.amber,
+        indicator: BoxDecoration(
+            color: Colors.amber,
+            border: Border.all(width: 1, color: Colors.black54),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        splashBorderRadius: BorderRadius.all(Radius.circular(10)),
       );
   @override
   Widget build(BuildContext context) {
@@ -26,112 +32,38 @@ class _MyWidgetState extends State<ListMenu> {
           length: 4,
           child: Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.yellowAccent,
-              title: const Text('List Menu'),
+              iconTheme: const IconThemeData(color: Colors.white),
+              backgroundColor: const Color.fromARGB(255, 47, 47, 47),
+              title: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 84),
+                  child: Text(
+                    'List Menu',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  )),
               bottom: PreferredSize(
-                preferredSize: _tabBar.preferredSize,
-                child: Material(
-                  color: Colors.greenAccent,
-                  child: _tabBar,
+                preferredSize: Size.fromHeight(60),
+                child: Container(
+                  height: 60,
+                  child: Material(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: _tabBar,
+                    ),
+                  ),
                 ),
               ),
             ),
-            drawer: Drawer(
-              child: ListView(
-                // Important: Remove any padding from the ListView.
-                padding: EdgeInsets.zero,
-                children: [
-                  const DrawerHeader(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                    ),
-                    child: Text('Drawer Header'),
-                  ),
-                  ListTile(
-                    title: const Text('Home'),
-                    // selected: _selectedIndex == 0,
-                    onTap: () {
-                      // Update the state of the app
-                      // _onItemTapped(0);
-                      // Then close the drawer
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Business'),
-                    // selected: _selectedIndex == 1,
-                    onTap: () {
-                      // Update the state of the app
-                      // _onItemTapped(1);
-                      // Then close the drawer
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('School'),
-                    // selected: _selectedIndex == 2,
-                    onTap: () {
-                      // Update the state of the app
-                      // _onItemTapped(2);
-                      // Then close the drawer
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-            ),
+            drawer: DrawerComponent(nums: 2),
             body: const TabBarView(children: [
-              MakananScreen(),
+              MakananPage(),
               MinumanScreen(),
               SnackScreen(),
               SteakScreen(),
             ]),
           ),
-        )
-
-//         SingleChildScrollView(
-//           child: Padding(
-//             padding: EdgeInsets.all(10),
-//             child: Column(
-//               children: [
-//                 const Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                   children: [
-//                     Text('Makanan'),
-//                     Text('Minuman'),
-//                     Text('Snack'),
-//                     Text('Steak')
-//                   ],
-//                 ),
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                   children: [
-//                     Container(
-//                       height: 10,
-//                       width: 100,
-//                       decoration: BoxDecoration(
-//                           border: Border.all(
-//                               color: Colors.yellow,
-//                               width: 2,
-//                               style: BorderStyle.solid,
-//                               strokeAlign: BorderSide.strokeAlignInside)),
-//                     ),
-//                     Container(
-//                       height: 10,
-//                       width: 100,
-//                       decoration: BoxDecoration(
-//                           border: Border.all(
-//                               color: Colors.yellow,
-//                               width: 2,
-//                               style: BorderStyle.solid,
-//                               strokeAlign: BorderSide.strokeAlignInside)),
-//                     ),
-//                   ],
-//                 )
-//               ],
-//             ),
-//           ),
-        );
+        ));
   }
 }
 
@@ -142,6 +74,50 @@ class MakananScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: Text('Tabs Makanan'),
+    );
+  }
+}
+
+class MakananPage extends StatelessWidget {
+  const MakananPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GridView.count(
+        padding: const EdgeInsets.all(5),
+        crossAxisCount: 2,
+        children: List.generate(5, (index) {
+          return _buildCard('Tahu Goreng', 'Rp. 5000');
+        }),
+      ),
+    );
+  }
+
+  Widget _buildCard(String name, String price) {
+    return Padding(
+      padding: const EdgeInsets.all(6),
+      child: Card(
+        margin: const EdgeInsets.all(3),
+        child: InkWell(
+          onTap: () {},
+          splashColor: Colors.white,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Image.asset(
+                  'lib/images/tahugoreng.jpg',
+                  width: 90,
+                  height: 90,
+                ),
+                Text(name, style: const TextStyle(fontSize: 12.0)),
+                Text(price, style: const TextStyle(fontSize: 12.0)),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
