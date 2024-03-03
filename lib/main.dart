@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orderez/view/ListMenu.dart';
 import 'package:orderez/view/LoginUser.dart';
 import 'package:orderez/view/Pesanan.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green.shade300),
         useMaterial3: true,
       ),
-      home: LoginUser(),
+      home: ListMenu(),
     );
   }
 }

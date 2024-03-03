@@ -9,19 +9,39 @@ class ListMenu extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<ListMenu> {
-  TabBar get _tabBar => TabBar(
+  TabBar get _tabBar => const TabBar(
         tabs: [
-          Tab(text: 'Makanan'),
-          Tab(text: 'Minuman'),
-          Tab(text: 'Snack'),
-          Tab(text: 'Steak'),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [Text('Makanan')],
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [Text('Minuman')],
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [Text('Snack')],
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [Text('Steak')],
+          ),
+          // Tab(text: 'Minuman'),
+          // Tab(text: 'Snack'),
+          // Tab(text: 'Steak'),
         ],
+        labelStyle: TextStyle(fontWeight: FontWeight.bold),
         labelColor: Colors.black,
-        indicatorColor: Colors.amber,
-        indicator: BoxDecoration(
-            color: Colors.amber,
-            border: Border.all(width: 1, color: Colors.black54),
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+        unselectedLabelColor: Colors.black,
+        // indicator: BoxDecoration(
+        //     color: Color.fromARGB(255, 229, 175, 16),
+        //     // border: Border.all(width: 1, color: Colors.black54),
+        //     borderRadius: BorderRadius.all(Radius.circular(10))),
         splashBorderRadius: BorderRadius.all(Radius.circular(10)),
       );
   @override
@@ -49,7 +69,7 @@ class _MyWidgetState extends State<ListMenu> {
                     color: Colors.white,
                     child: Padding(
                       padding: const EdgeInsets.all(8),
-                      child: _tabBar,
+                      child: Expanded(child: _tabBar),
                     ),
                   ),
                 ),
@@ -62,6 +82,12 @@ class _MyWidgetState extends State<ListMenu> {
               SnackScreen(),
               SteakScreen(),
             ]),
+            floatingActionButton: FloatingActionButton(
+                child: Image.asset('lib/images/btn_add.png'),
+                onPressed: () {
+                  print('test button');
+                }),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           ),
         ));
   }
@@ -87,7 +113,7 @@ class MakananPage extends StatelessWidget {
       body: GridView.count(
         padding: const EdgeInsets.all(5),
         crossAxisCount: 2,
-        children: List.generate(5, (index) {
+        children: List.generate(15, (index) {
           return _buildCard('Tahu Goreng', 'Rp. 5000');
         }),
       ),

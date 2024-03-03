@@ -63,6 +63,8 @@ flutter:
   assets:
     - lib/images/app_logo.png
     - lib/images/tahugoreng.jpg
+    - lib/images/bg.png
+    - lib/images/btn_add.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
