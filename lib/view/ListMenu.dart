@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:orderez/Widget/DrawerComponent.dart';
+import 'package:orderez/theme.dart';
+import 'package:orderez/view/DetailMenu.dart';
 
 class ListMenu extends StatefulWidget {
   const ListMenu({super.key});
@@ -83,9 +85,17 @@ class _MyWidgetState extends State<ListMenu> {
               SteakScreen(),
             ]),
             floatingActionButton: FloatingActionButton(
-                child: Image.asset('lib/images/btn_add.png'),
+                focusColor: Colors.yellow,
+                backgroundColor: yellowdark,
+                // child: Image.asset('lib/images/btn_add.png'),
+                child: const Icon(
+                  Icons.add,
+                  size: 50,
+                  color: Colors.white,
+                ),
                 onPressed: () {
-                  print('test button');
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => DetailMenu()));
                 }),
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           ),

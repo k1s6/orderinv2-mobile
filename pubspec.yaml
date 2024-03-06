@@ -31,6 +31,8 @@ dependencies:
   get:
   flutter:
     sdk: flutter
+  # add this line to your dependencies
+  fluttertoast: ^8.2.4
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -65,6 +67,15 @@ flutter:
     - lib/images/tahugoreng.jpg
     - lib/images/bg.png
     - lib/images/btn_add.png
+    - lib/imgtugas/gbr1.jpg
+    - lib/imgtugas/gbr2.jpg
+    - lib/imgtugas/gbr2cp.jpg
+    - lib/imgtugas/gbr3.jpg
+    - lib/imgtugas/gbr4.jpg
+    - lib/imgtugas/gbr5.jpg
+    - lib/imgtugas/gbr6.jpg
+    - lib/imgtugas/gbr7.jpg
+    - lib/imgtugas/gbr8.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

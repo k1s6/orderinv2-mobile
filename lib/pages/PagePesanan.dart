@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:orderez/Widget/ListTileComponent.dart';
+import 'package:orderez/Widget/ListCardPesanan.dart';
 import 'package:orderez/view/LoginUser.dart';
 
 class PagePesanan extends StatelessWidget {
@@ -7,12 +8,11 @@ class PagePesanan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        ListtilComponent(selected: false, name: 'name', icons: Icon(Icons.ac_unit_outlined), destination: LoginUser()),
-        ListtilComponent(selected: false, name: 'name', icons: Icon(Icons.ac_unit_outlined), destination: LoginUser()),
-        ListtilComponent(selected: false, name: 'name', icons: Icon(Icons.ac_unit_outlined), destination: LoginUser()),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 14.0),
+      child: ListView(
+        children: [ListCardPesanan(), ListCardPesanan()],
+      ),
     );
   }
 }

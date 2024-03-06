@@ -21,6 +21,10 @@ class _PesananState extends State<Pesanan> {
         ],
         labelColor: Colors.black,
         indicatorColor: Colors.black,
+        unselectedLabelStyle:
+            TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        unselectedLabelColor: Colors.black87,
+        labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
       );
   @override
   Widget build(BuildContext context) {

@@ -69,6 +69,9 @@ class DrawerComponent extends StatelessWidget {
                     icons: Icon(Icons.note_alt_rounded),
                     destination: Pesanan(),
                   ),
+                  const SizedBox(
+                    height: 4,
+                  ),
                   ListtilComponent(
                     selected: listbool[1],
                     name: 'List Menu',
@@ -78,13 +81,16 @@ class DrawerComponent extends StatelessWidget {
                 ],
               ),
             ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: () {
-                // Handle logout action
-                Navigator.pop(context);
-              },
+            Container(
+              decoration: BoxDecoration(color: Colors.redAccent),
+              child: ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text('Logout'),
+                onTap: () {
+                  // Handle logout action
+                  Navigator.pop(context);
+                },
+              ),
             ),
             const SizedBox(
               height: 100,
