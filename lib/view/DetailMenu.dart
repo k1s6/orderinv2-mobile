@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orderez/Widget/TextFieldComponent.dart';
+import 'package:orderez/Widget/ButtonWidget.dart';
 import 'package:orderez/view/ListMenu.dart';
 
 class DetailMenu extends StatefulWidget {
@@ -79,7 +80,10 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
           Icons.image,
           size: 170,
         ),
-        const Text('Edit'),
+        const Text(
+          'Edit',
+          style: TextStyle(color: Colors.blue),
+        ),
         const SizedBox(
           height: 20,
         ),
@@ -136,6 +140,16 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
             ],
           ),
         ),
+        const Expanded(child: SizedBox()),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 30),
+          child: TextButton(
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+              ),
+              onPressed: () {},
+              child: const Text('Tambah')),
+        )
       ],
     );
   }
@@ -153,7 +167,6 @@ class TextFieldDetails extends StatelessWidget {
       child: TextField(
           controller: controller,
           textAlignVertical: TextAlignVertical.center,
-
           // textAlign: TextAlign.center,
           decoration: const InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
