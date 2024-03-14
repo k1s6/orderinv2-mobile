@@ -80,9 +80,9 @@ class _MyWidgetState extends State<ListMenu> {
             drawer: DrawerComponent(nums: 2),
             body: const TabBarView(children: [
               MakananPage(),
-              MinumanScreen(),
-              SnackScreen(),
-              SteakScreen(),
+              MinumanPage(),
+              SnackPage(),
+              SteakPage(),
             ]),
             floatingActionButton: FloatingActionButton(
                 focusColor: Colors.yellow,
@@ -100,17 +100,6 @@ class _MyWidgetState extends State<ListMenu> {
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           ),
         ));
-  }
-}
-
-class MakananScreen extends StatelessWidget {
-  const MakananScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Tabs Makanan'),
-    );
   }
 }
 
@@ -144,8 +133,8 @@ class MakananPage extends StatelessWidget {
               children: <Widget>[
                 Image.asset(
                   'lib/images/tahugoreng.jpg',
-                  width: 90,
-                  height: 90,
+                  width: 170,
+                  height: 170,
                 ),
                 Text(name, style: const TextStyle(fontSize: 12.0)),
                 Text(price, style: const TextStyle(fontSize: 12.0)),
@@ -158,35 +147,136 @@ class MakananPage extends StatelessWidget {
   }
 }
 
-class MinumanScreen extends StatelessWidget {
-  const MinumanScreen({super.key});
+class MinumanPage extends StatelessWidget {
+  const MinumanPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MenuPlaceholder(
-      categoriesMenu: "Minuman",
+    return Scaffold(
+      body: GridView.count(
+        padding: const EdgeInsets.all(5),
+        crossAxisCount: 2,
+        children: List.generate(15, (index) {
+          return _buildCard('Tahu Goreng', 'Rp. 5000');
+        }),
+      ),
+    );
+  }
+
+  Widget _buildCard(String name, String price) {
+    return Padding(
+      padding: const EdgeInsets.all(6),
+      child: Card(
+        margin: const EdgeInsets.all(3),
+        child: InkWell(
+          onTap: () {},
+          splashColor: Colors.white,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Image.asset(
+                  'lib/images/tahugoreng.jpg',
+                  width: 170,
+                  height: 170,
+                ),
+                Text(name, style: const TextStyle(fontSize: 12.0)),
+                Text(price, style: const TextStyle(fontSize: 12.0)),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
 
-class SnackScreen extends StatelessWidget {
-  const SnackScreen({super.key});
+
+
+class SnackPage extends StatelessWidget {
+  const SnackPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Tabs Snack'),
+    return Scaffold(
+      body: GridView.count(
+        padding: const EdgeInsets.all(5),
+        crossAxisCount: 2,
+        children: List.generate(15, (index) {
+          return _buildCard('Tahu Goreng', 'Rp. 5000');
+        }),
+      ),
+    );
+  }
+
+  Widget _buildCard(String name, String price) {
+    return Padding(
+      padding: const EdgeInsets.all(6),
+      child: Card(
+        margin: const EdgeInsets.all(3),
+        child: InkWell(
+          onTap: () {},
+          splashColor: Colors.white,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Image.asset(
+                  'lib/images/tahugoreng.jpg',
+                  width: 170,
+                  height: 170,
+                ),
+                Text(name, style: const TextStyle(fontSize: 12.0)),
+                Text(price, style: const TextStyle(fontSize: 12.0)),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
 
-class SteakScreen extends StatelessWidget {
-  const SteakScreen({super.key});
+class SteakPage extends StatelessWidget {
+  const SteakPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Tabs Steak'),
+    return Scaffold(
+      body: GridView.count(
+        padding: const EdgeInsets.all(5),
+        crossAxisCount: 2,
+        children: List.generate(15, (index) {
+          return _buildCard('Tahu Goreng', 'Rp. 5000');
+        }),
+      ),
+    );
+  }
+
+  Widget _buildCard(String name, String price) {
+    return Padding(
+      padding: const EdgeInsets.all(6),
+      child: Card(
+        margin: const EdgeInsets.all(3),
+        child: InkWell(
+          onTap: () {},
+          splashColor: Colors.white,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Image.asset(
+                  'lib/images/tahugoreng.jpg',
+                  width: 170,
+                  height: 170,
+                ),
+                Text(name, style: const TextStyle(fontSize: 12.0)),
+                Text(price, style: const TextStyle(fontSize: 12.0)),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
