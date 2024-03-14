@@ -5,7 +5,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:orderez/view/ListMenu.dart';
 
 class ListCardPesanan extends StatelessWidget {
-  const ListCardPesanan({super.key});
+  const ListCardPesanan({super.key, required this.dataList});
+
+  final List dataList;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,9 @@ class ListCardPesanan extends StatelessWidget {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return SecondPageDialog(); // Custom dialog widget
+              return SecondPageDialog(
+                dataList: dataList,
+              ); // Custom dialog widget
             },
           );
         },
@@ -57,6 +61,10 @@ class ListCardPesanan extends StatelessWidget {
 }
 
 class SecondPageDialog extends StatelessWidget {
+  const SecondPageDialog({super.key, required this.dataList});
+
+  final List dataList;
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -65,81 +73,125 @@ class SecondPageDialog extends StatelessWidget {
             MediaQuery.of(context).size.width * 0.9, // 90% of the screen width
         height: MediaQuery.of(context).size.height *
             0.9, // 90% of the screen height
-        child: SecondPageContent(),
-      ),
-    );
-  }
-}
-
-class SecondPageContent extends StatelessWidget {
-  final List dataList = [
-    {'nama': 'expresso', 'jumlah': 2, 'harga': 10000},
-    {'nama': 'americano', 'jumlah': 1, 'harga': 30000},
-    {'nama': 'steak', 'jumlah': 3, 'harga': 50000},
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: _getTitleProduct('ok'),
-        automaticallyImplyLeading: false, // Remove the back button
-      ),
-      body: Container(
-        child: Column(
-          children: [
-            DataTable(
-              columns: [
-                DataColumn(label: Text('nama')),
-                DataColumn(label: Text('jumlah')),
-              ],
-              rows: dataList.map((e) {
-                return DataRow(cells: [
-                  DataCell(Text(e["nama"] ?? '')),
-                  DataCell(Text(
-                      '${e["jumlah"].toString()} x Rp ${e["harga"].toString()}')),
-                ]);
-              }).toList(),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Row(
+        child: Scaffold(
+          appBar: AppBar(
+            title: _getTitleProduct('ok'),
+            automaticallyImplyLeading: false, // Remove the back button
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the page dialog
+                },
+              ),
+            ],
+          ),
+          body: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: OutlinedButton(
-                    child: Text("tolak"),
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: Colors.red,
-                      ),
+                Container(
+                  height: 500,
+                  child: SingleChildScrollView(
+                    child: DataTable(
+                      border: TableBorder(
+                          horizontalInside:
+                              BorderSide(width: 1, color: Colors.grey)),
+                      columns: const [
+                        DataColumn(label: Text('nama')),
+                        DataColumn(
+                            label: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                'jumlah',
+                                textAlign: TextAlign.end,
+                              ),
+                            ),
+                            numeric: true),
+                      ],
+                      rows: dataList.map((e) {
+                        return DataRow(cells: [
+                          DataCell(Text(e["nama"] ?? '')),
+                          DataCell(Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              'Rp ${e["harga"].toString()} x ${e["jumlah"].toString()}',
+                              textAlign: TextAlign.end,
+                            ),
+                          )),
+                        ]);
+                      }).toList(),
                     ),
-                    onPressed: () {},
                   ),
                 ),
-                Expanded(child: SizedBox()),
-                Padding(
-                  padding: const EdgeInsets.only(right: 15),
-                  child: OutlinedButton(
-                    child: Text("konfirmasi"),
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: Colors.green,
+                Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                        children: [
+                          Text('total harga'),
+                          Expanded(child: SizedBox()),
+                          Text('Rp berapa gitu')
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: OutlinedButton(
+                        child: Text("tolak"),
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            color: Colors.red,
+                          ),
+                        ),
+                        onPressed: () {},
                       ),
                     ),
-                    onPressed: () {},
-                  ),
-                ),
+                    Expanded(child: SizedBox()),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15),
+                      child: OutlinedButton(
+                        child: Text("konfirmasi"),
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            color: Colors.green,
+                          ),
+                        ),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ],
+                )
               ],
-            )
-          ],
+            ),
+          ),
         ),
       ),
-
     );
   }
 }
+
+// final List dataList = [
+//   {'nama': 'expresso', 'jumlah': 2, 'harga': 10000},
+//   {'nama': 'americano', 'jumlah': 1, 'harga': 30000},
+//   {'nama': 'steak', 'jumlah': 3, 'harga': 50000},
+// ];
+
+// class SecondPageContent extends StatelessWidget {
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return
+//   }
+// }
 
 Text _getTitleProduct(String txt) {
   switch (txt) {
