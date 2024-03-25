@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orderez/koneksi/Koneksi.dart';
+import 'package:orderez/view/LoginUser.dart';
 // import 'package:orderez/view/DetailMenu.dart';
 // import 'package:orderez/view/ListMenu.dart';
-import 'package:orderez/view/LoginUser.dart';
-// import 'package:orderez/view/Pesanan.dart';
+// import 'package:orderez/view/LoginUser.dart';
+import 'package:orderez/view/Pesanan.dart';
 // import 'package:orderez/view/splashscreen.dart';
 
 void main() {

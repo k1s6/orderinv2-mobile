@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:orderez/Widget/ListTileComponent.dart';
 import 'package:orderez/Widget/ListCardPesanan.dart';
-import 'package:orderez/view/LoginUser.dart';
 
-class PagePesanan extends StatelessWidget {
-  const PagePesanan({super.key});
+class PageBatalkan extends StatelessWidget {
+  const PageBatalkan({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,13 +10,14 @@ class PagePesanan extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 14.0),
       child: ListView(
         children: [
-          ListCardPesanan(dataList: dataList1, categories: "pesanan",),
-          ListCardPesanan(dataList: dataList2, categories: "pesanan",)
+          ListCardPesanan(dataList: dataList1, categories: "dibatalkan",),
+          ListCardPesanan(dataList: dataList2, categories: "dibatalkan",)
         ],
       ),
     );
   }
 }
+
 
 final List dataList1 = [
   {'nama': 'expresso', 'jumlah': 2, 'harga': 10000},

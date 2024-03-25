@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:orderez/Widget/DrawerComponent.dart';
 import 'package:orderez/Widget/ListTileComponent.dart';
+import 'package:orderez/pages/PageBatalkan.dart';
+import 'package:orderez/pages/PageKonfirmasi.dart';
 import 'package:orderez/view/ListMenu.dart';
 import 'package:orderez/pages/PagePesanan.dart';
 
@@ -54,8 +56,8 @@ class _PesananState extends State<Pesanan> {
           drawer: DrawerComponent(nums: 1),
           body: const TabBarView(children: [
             PagePesanan(),
-            PlaceholderPage(),
-            PlaceholderPage(),
+            PageBatalkan(),
+            PageKonfirmasi(),
           ]),
         ),
       ),

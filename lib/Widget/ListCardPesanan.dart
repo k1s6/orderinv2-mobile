@@ -5,9 +5,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:orderez/view/ListMenu.dart';
 
 class ListCardPesanan extends StatelessWidget {
-  const ListCardPesanan({super.key, required this.dataList});
+  const ListCardPesanan(
+      {super.key, required this.dataList, required this.categories});
 
   final List dataList;
+  final String categories;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class ListCardPesanan extends StatelessWidget {
             builder: (BuildContext context) {
               return SecondPageDialog(
                 dataList: dataList,
+                categories: categories,
               ); // Custom dialog widget
             },
           );
@@ -61,9 +64,11 @@ class ListCardPesanan extends StatelessWidget {
 }
 
 class SecondPageDialog extends StatelessWidget {
-  const SecondPageDialog({super.key, required this.dataList});
+  const SecondPageDialog(
+      {super.key, required this.dataList, required this.categories});
 
   final List dataList;
+  final String categories;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +77,7 @@ class SecondPageDialog extends StatelessWidget {
         width:
             MediaQuery.of(context).size.width * 0.9, // 90% of the screen width
         height: MediaQuery.of(context).size.height *
-            0.9, // 90% of the screen height
+            0.7, // 90% of the screen height
         child: Scaffold(
           appBar: AppBar(
             title: _getTitleProduct('ok'),
@@ -90,86 +95,122 @@ class SecondPageDialog extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  height: 500,
-                  child: SingleChildScrollView(
-                    child: DataTable(
-                      border: TableBorder(
-                          horizontalInside:
-                              BorderSide(width: 1, color: Colors.grey)),
-                      columns: const [
-                        DataColumn(label: Text('nama')),
-                        DataColumn(
-                            label: Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                'jumlah',
-                                textAlign: TextAlign.end,
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    return ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: 0,
+                        maxHeight: 300,
+                      ),
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        child: SingleChildScrollView(
+                          child: DataTable(
+                            border: TableBorder(
+                              horizontalInside:
+                                  BorderSide(width: 1, color: Colors.grey),
+                            ),
+                            columns: const [
+                              DataColumn(label: Text('nama')),
+                              DataColumn(
+                                label: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'jumlah',
+                                    textAlign: TextAlign.end,
+                                  ),
+                                ),
+                                numeric: true,
                               ),
-                            ),
-                            numeric: true),
-                      ],
-                      rows: dataList.map((e) {
-                        return DataRow(cells: [
-                          DataCell(Text(e["nama"] ?? '')),
-                          DataCell(Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              'Rp ${e["harga"].toString()} x ${e["jumlah"].toString()}',
-                              textAlign: TextAlign.end,
-                            ),
-                          )),
-                        ]);
-                      }).toList(),
-                    ),
-                  ),
+                            ],
+                            rows: dataList.map((e) {
+                              return DataRow(cells: [
+                                DataCell(Text(e["nama"] ?? '')),
+                                DataCell(
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      'Rp ${e["harga"].toString()} x ${e["jumlah"].toString()}',
+                                      textAlign: TextAlign.end,
+                                    ),
+                                  ),
+                                ),
+                              ]);
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(10),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                       child: Row(
                         children: [
-                          Text('total harga'),
+                          Text(
+                            'total harga',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           Expanded(child: SizedBox()),
-                          Text('Rp berapa gitu')
+                          Text('Rp 50.000', 
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )
                         ],
                       ),
                     )
                   ],
                 ),
-                SizedBox(
-                  height: 30,
+                Expanded(
+                  child: SizedBox(),
                 ),
                 Row(
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 15),
-                      child: OutlinedButton(
-                        child: Text("tolak"),
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            color: Colors.red,
-                          ),
-                        ),
-                        onPressed: () {},
-                      ),
+                      child: this.categories == "pesanan"
+                          ? OutlinedButton(
+                              child: Text(
+                                "tolak",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                    color: Colors.red,
+                                  ),
+                                  backgroundColor: Colors.red),
+                              onPressed: () {},
+                            )
+                          : SizedBox(),
                     ),
                     Expanded(child: SizedBox()),
                     Padding(
                       padding: const EdgeInsets.only(right: 15),
-                      child: OutlinedButton(
-                        child: Text("konfirmasi"),
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            color: Colors.green,
-                          ),
-                        ),
-                        onPressed: () {},
-                      ),
+                      child: this.categories == "pesanan"
+                          ? OutlinedButton(
+                              child: Text(
+                                "konfirmasi",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              style: OutlinedButton.styleFrom(
+                                side: BorderSide(
+                                  color: Colors.green,
+                                ),
+                                backgroundColor: Colors.green,
+                              ),
+                              onPressed: () {},
+                            )
+                          : SizedBox(),
                     ),
                   ],
-                )
+                ),
+                Padding(padding: EdgeInsets.only(bottom: 60), child: SizedBox())
               ],
             ),
           ),
