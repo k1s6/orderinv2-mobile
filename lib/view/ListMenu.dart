@@ -133,8 +133,8 @@ class MakananPage extends StatelessWidget {
               children: <Widget>[
                 Image.asset(
                   'lib/images/tahugoreng.jpg',
-                  width: 170,
-                  height: 170,
+                  // width: 170,
+                  // height: 170,
                 ),
                 Text(name, style: const TextStyle(fontSize: 12.0)),
                 Text(price, style: const TextStyle(fontSize: 12.0)),
@@ -190,8 +190,6 @@ class MinumanPage extends StatelessWidget {
     );
   }
 }
-
-
 
 class SnackPage extends StatelessWidget {
   const SnackPage({super.key});

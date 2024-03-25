@@ -25,12 +25,10 @@ class _LoginUserState extends State<LoginUser> {
     return Material(
       child: Container(
         decoration: const BoxDecoration(
-            gradient: LinearGradient(
-          colors: [yellowcustom, Colors.white],
-          stops: [0.1, 0.50],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        )),
+            image: DecorationImage(
+                image: AssetImage('lib/images/bg.png'),
+                opacity: 0.5,
+                fit: BoxFit.cover)),
         child: Center(
           child: (Column(
             children: [
@@ -41,7 +39,7 @@ class _LoginUserState extends State<LoginUser> {
                 children: [
                   Image.asset(
                     'lib/images/app_logo.png',
-                    height: 140,
+                    height: 180,
                   ),
                   const SizedBox(
                     height: 20,
@@ -51,7 +49,7 @@ class _LoginUserState extends State<LoginUser> {
               const Row(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

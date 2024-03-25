@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orderez/view/Pesanan.dart';
+import 'package:orderez/theme.dart';
 
 class ButtonLogs extends StatelessWidget {
   const ButtonLogs({
@@ -13,9 +14,9 @@ class ButtonLogs extends StatelessWidget {
       onTap: () => Get.to(Pesanan()),
       child: Container(
           padding: EdgeInsets.all(10),
-          margin: EdgeInsets.symmetric(horizontal: 10),
+          margin: EdgeInsets.symmetric(horizontal: 20),
           decoration: const BoxDecoration(
-              color: Colors.yellow,
+              color: yellowcustom2,
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: const Center(
             child: Text(
