@@ -1,49 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:orderez/Widget/DrawerComponent.dart';
+import 'package:orderez/pages/PageListMinuman.dart';
+import 'package:orderez/pages/PageListSnack.dart';
+import 'package:orderez/pages/PageListSteak.dart';
 import 'package:orderez/theme.dart';
 import 'package:orderez/view/DetailMenu.dart';
+import 'package:orderez/pages/PageListMakanan.dart';
 
 class ListMenu extends StatefulWidget {
   const ListMenu({super.key});
 
   @override
-  State<ListMenu> createState() => _MyWidgetState();
+  State<ListMenu> createState() => _ListMenuState();
 }
 
-class _MyWidgetState extends State<ListMenu> {
+class _ListMenuState extends State<ListMenu> {
   TabBar get _tabBar => const TabBar(
         tabs: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Text('Makanan')],
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Text('Minuman')],
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Text('Snack')],
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Text('Steak')],
-          ),
-          // Tab(text: 'Minuman'),
-          // Tab(text: 'Snack'),
-          // Tab(text: 'Steak'),
+          Tab(text: 'Makanan'),
+          Tab(text: 'Minuman'),
+          Tab(text: 'Snack'),
+          Tab(text: 'Steak'),
         ],
+        indicatorColor: yellowdark ,
         labelStyle: TextStyle(fontWeight: FontWeight.bold),
         labelColor: Colors.black,
         unselectedLabelColor: Colors.black,
-        // indicator: BoxDecoration(
-        //     color: Color.fromARGB(255, 229, 175, 16),
-        //     // border: Border.all(width: 1, color: Colors.black54),
-        //     borderRadius: BorderRadius.all(Radius.circular(10))),
         splashBorderRadius: BorderRadius.all(Radius.circular(10)),
       );
   @override
@@ -79,10 +61,10 @@ class _MyWidgetState extends State<ListMenu> {
             ),
             drawer: DrawerComponent(nums: 2),
             body: const TabBarView(children: [
-              MakananPage(),
-              MinumanPage(),
-              SnackPage(),
-              SteakPage(),
+              PageMakanan(),
+              PageMinuman(),
+              PageSnack(),
+              PageSteak()
             ]),
             floatingActionButton: FloatingActionButton(
                 focusColor: Colors.yellow,
@@ -99,183 +81,8 @@ class _MyWidgetState extends State<ListMenu> {
                 }),
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           ),
-        ));
-  }
-}
-
-class MakananPage extends StatelessWidget {
-  const MakananPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: GridView.count(
-        padding: const EdgeInsets.all(5),
-        crossAxisCount: 2,
-        children: List.generate(15, (index) {
-          return _buildCard('Tahu Goreng', 'Rp. 5000');
-        }),
-      ),
-    );
-  }
-
-  Widget _buildCard(String name, String price) {
-    return Padding(
-      padding: const EdgeInsets.all(6),
-      child: Card(
-        margin: const EdgeInsets.all(3),
-        child: InkWell(
-          onTap: () {},
-          splashColor: Colors.white,
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Image.asset(
-                  'lib/images/tahugoreng.jpg',
-                  // width: 170,
-                  // height: 170,
-                ),
-                Text(name, style: const TextStyle(fontSize: 12.0)),
-                Text(price, style: const TextStyle(fontSize: 12.0)),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class MinumanPage extends StatelessWidget {
-  const MinumanPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: GridView.count(
-        padding: const EdgeInsets.all(5),
-        crossAxisCount: 2,
-        children: List.generate(15, (index) {
-          return _buildCard('Tahu Goreng', 'Rp. 5000');
-        }),
-      ),
-    );
-  }
-
-  Widget _buildCard(String name, String price) {
-    return Padding(
-      padding: const EdgeInsets.all(6),
-      child: Card(
-        margin: const EdgeInsets.all(3),
-        child: InkWell(
-          onTap: () {},
-          splashColor: Colors.white,
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Image.asset(
-                  'lib/images/tahugoreng.jpg',
-                  width: 170,
-                  height: 170,
-                ),
-                Text(name, style: const TextStyle(fontSize: 12.0)),
-                Text(price, style: const TextStyle(fontSize: 12.0)),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SnackPage extends StatelessWidget {
-  const SnackPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: GridView.count(
-        padding: const EdgeInsets.all(5),
-        crossAxisCount: 2,
-        children: List.generate(15, (index) {
-          return _buildCard('Tahu Goreng', 'Rp. 5000');
-        }),
-      ),
-    );
-  }
-
-  Widget _buildCard(String name, String price) {
-    return Padding(
-      padding: const EdgeInsets.all(6),
-      child: Card(
-        margin: const EdgeInsets.all(3),
-        child: InkWell(
-          onTap: () {},
-          splashColor: Colors.white,
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Image.asset(
-                  'lib/images/tahugoreng.jpg',
-                  width: 170,
-                  height: 170,
-                ),
-                Text(name, style: const TextStyle(fontSize: 12.0)),
-                Text(price, style: const TextStyle(fontSize: 12.0)),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SteakPage extends StatelessWidget {
-  const SteakPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: GridView.count(
-        padding: const EdgeInsets.all(5),
-        crossAxisCount: 2,
-        children: List.generate(15, (index) {
-          return _buildCard('Tahu Goreng', 'Rp. 5000');
-        }),
-      ),
-    );
-  }
-
-  Widget _buildCard(String name, String price) {
-    return Padding(
-      padding: const EdgeInsets.all(6),
-      child: Card(
-        margin: const EdgeInsets.all(3),
-        child: InkWell(
-          onTap: () {},
-          splashColor: Colors.white,
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Image.asset(
-                  'lib/images/tahugoreng.jpg',
-                  width: 170,
-                  height: 170,
-                ),
-                Text(name, style: const TextStyle(fontSize: 12.0)),
-                Text(price, style: const TextStyle(fontSize: 12.0)),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+        )
+      );
   }
 }
 
