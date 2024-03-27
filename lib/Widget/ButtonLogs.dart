@@ -6,12 +6,15 @@ import 'package:orderez/theme.dart';
 class ButtonLogs extends StatelessWidget {
   const ButtonLogs({
     super.key,
+    required this.ontap
   });
+
+  final ontap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(Pesanan()),
+      onTap: () => ontap,
       child: Container(
           padding: EdgeInsets.all(10),
           margin: EdgeInsets.symmetric(horizontal: 20),

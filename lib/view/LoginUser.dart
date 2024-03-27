@@ -4,6 +4,8 @@ import 'package:orderez/Widget/TextFieldComponent.dart';
 import 'package:orderez/Widget/ButtonLogs.dart';
 import 'package:orderez/theme.dart';
 import 'package:orderez/view/Pesanan.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginUser extends StatefulWidget {
   LoginUser({super.key});
@@ -19,6 +21,45 @@ class _LoginUserState extends State<LoginUser> {
   final passwordController = TextEditingController();
 
   // Function toPesanan = () => {};
+
+  Future<void> _login() async {
+    print('dahlah');
+    final String apiUrl =
+        'http://localhost/apimobileorderin/login.php'; // Ganti dengan alamat API login Anda
+    final response = await http.post(Uri.parse(apiUrl),
+        body: jsonEncode({
+          'username': usernameController.text,
+          'password': passwordController.text,
+        }));
+
+    final responseData = jsonDecode(response.body);
+    if (responseData['status'] == 'success') {
+      // Navigasi ke halaman setelah login berhasil
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Pesanan()),
+      );
+    } else {
+      // Tampilkan pesan kesalahan jika login gagal
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Login Gagal'),
+            content: Text(responseData['message']),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +128,10 @@ class _LoginUserState extends State<LoginUser> {
               const SizedBox(
                 height: 70,
               ),
-              const ButtonLogs()
+              ElevatedButton(
+                onPressed: _login,
+                child: Text('Login'),
+              ),
             ],
           )),
         ),

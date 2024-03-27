@@ -13,13 +13,14 @@ class _KoneksiState extends State<Koneksi> {
   List data = [];
 
   Future<void> getrecord() async {
-    String uri = "http://localhost:3306/apimobileorderin/data_transaksi.php";
+    String uri = "http://192.168.1.73/apimobileorderin/data_transaksi.php";
 
     try {
       var response = await http.get(Uri.parse(uri));
 
       setState(() {
         data = jsonDecode(response.body);
+        print(data);
       });
 
       print(response);
