@@ -1,0 +1,85 @@
+{
+    "table_product": {
+      "fields": {
+        "kode_product": "bigint",
+        "nama_product": "varchar",
+        "stock_product": "enum",
+        "harga_product": "int",
+        "jenis_product": "enum",
+        "gambar_product": "varchar"
+      },
+      "data": [
+        {
+          "kode_product": 1,
+          "nama_product": "burger",
+          "stock_product": "habis",
+          "harga_product": 29000,
+          "jenis_product": "makanan",
+          "gambar_product": ""
+        },
+        {
+          "kode_product": 2,
+          "nama_product": "lemon tea",
+          "stock_product": "tersedia",
+          "harga_product": 90000,
+          "jenis_product": "minuman",
+          "gambar_product": ""
+        },
+        {
+          "kode_product": 5,
+          "nama_product": "expresso",
+          "stock_product": "tersedia",
+          "harga_product": 35000,
+          "jenis_product": "minuman",
+          "gambar_product": ""
+        },
+        {
+          "kode_product": 8,
+          "nama_product": "americano",
+          "stock_product": "tersedia",
+          "harga_product": 50000,
+          "jenis_product": "minuman",
+          "gambar_product": ""
+        },
+        {
+          "kode_product": 12,
+          "nama_product": "coklat panas",
+          "stock_product": "habis",
+          "harga_product": 10000,
+          "jenis_product": "minuman",
+          "gambar_product": ""
+        }
+      ]
+    },
+    "transaksi": {
+      "fields": {
+        "kode_transaksi": "bigint",
+        "nama": "varchar",
+        "waktu": "datetime",
+        "status": "enum",
+        "jumlah": "int",
+        "total": "bigint"
+      },
+      "data": []
+    },
+    "users": {
+      "fields": {
+        "id": "bigint",
+        "name": "varchar",
+        "email": "varchar",
+        "email_verified_at": "timestamp",
+        "password": "varchar",
+        "remember_token": "varchar",
+        "created_at": "timestamp",
+        "updated_at": "timestamp"
+      },
+      "data": [
+        {
+          "id": 1,
+          "name": "budiono siregar",
+          "email": "budionosiregar@gmail.com",
+          "password": "admin1234"
+        }
+      ]
+    }
+  }
