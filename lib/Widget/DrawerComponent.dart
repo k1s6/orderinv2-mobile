@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:orderez/Widget/ListTileComponent.dart';
 import 'package:orderez/view/ListMenu.dart';
+import 'package:orderez/view/LoginUser.dart';
 import 'package:orderez/view/Pesanan.dart';
 
 class DrawerComponent extends StatelessWidget {
@@ -89,6 +90,8 @@ class DrawerComponent extends StatelessWidget {
                 onTap: () {
                   // Handle logout action
                   Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginUser()));
                 },
               ),
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orderez/Widget/TextFieldComponent.dart';
 import 'package:orderez/Widget/ButtonLogs.dart';
+import 'package:orderez/configuration/Constant.dart';
 import 'package:orderez/theme.dart';
 import 'package:orderez/view/Pesanan.dart';
 import 'package:http/http.dart' as http;
@@ -22,10 +23,97 @@ class _LoginUserState extends State<LoginUser> {
 
   // Function toPesanan = () => {};
 
+static Future<void> signIn(String username, String password, BuildContext context) async {
+    // Ganti URL sesuai dengan URL endpoint Anda
+    final String apiUrl = '${OrderinAppConstant.baseURL}/login';
+
+    try {
+      // Kirim permintaan HTTP POST ke server
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: {'username': username, 'password': password,},
+      );
+
+      // Periksa status code respons dari server
+      if (response.statusCode == 200) {
+        // Decode respons JSON
+        final responseData = json.decode(response.body);
+
+        // Periksa status dalam respons
+        if (responseData['status'] == 'success') {
+          // Jika login berhasil, dapatkan response message
+           Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Pesanan()),
+      );
+
+          // Lakukan apa yang perlu dilakukan setelah login berhasil, misalnya navigasi ke halaman beranda
+        } else {
+          // Jika login gagal, dapatkan pesan error
+          String errorMessage = responseData['message'];
+showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Login Gagal'),
+            content: Text(responseData['message']),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+
+        }
+      } else {
+        showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Login Gagal'),
+            content: Text('error 01'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      }
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Login Gagal'),
+            content: Text('error 02'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+
   Future<void> _login() async {
     print('dahlah');
-    final String apiUrl =
-        'http://localhost/apimobileorderin/login.php'; // Ganti dengan alamat API login Anda
+    final String apiUrl = '${OrderinAppConstant.baseURL}/login';
     final response = await http.post(Uri.parse(apiUrl),
         body: jsonEncode({
           'username': usernameController.text,
@@ -128,9 +216,25 @@ class _LoginUserState extends State<LoginUser> {
               const SizedBox(
                 height: 70,
               ),
-              ElevatedButton(
-                onPressed: _login,
-                child: Text('Login'),
+              GestureDetector(
+                onTap: ()async {
+                  await signIn(usernameController.text, passwordController.text, context);
+                },
+                child: Container(
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    decoration: const BoxDecoration(
+                        color: yellowcustom2,
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child: const Center(
+                      child: Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )),
               ),
             ],
           )),
