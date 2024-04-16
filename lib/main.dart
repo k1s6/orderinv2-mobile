@@ -8,6 +8,7 @@ import 'package:orderez/view/LoginUser.dart';
 import 'package:orderez/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:orderez/view/Pesanan.dart';
 import 'package:orderez/view/splashscreen.dart';
 
 void main() {
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green.shade300),
         useMaterial3: true,
       ),
-      home: SplashScreen(),
+      home: Pesanan(),
     );
   }
 }

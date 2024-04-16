@@ -1,3 +1,3 @@
 class OrderinAppConstant {
-  static String baseURL = "http://172.16.103.28:8000/api/apimobileorderin";
+  static String baseURL = "http://192.168.1.6:8000/api/apimobileorderin";
 }

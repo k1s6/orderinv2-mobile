@@ -51,23 +51,23 @@ static Future<void> signIn(String username, String password, BuildContext contex
         } else {
           // Jika login gagal, dapatkan pesan error
           String errorMessage = responseData['message'];
-showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Login Gagal'),
-            content: Text(responseData['message']),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
+          showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Login Gagal'),
+                      content: Text(responseData['message']),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('OK'),
+                        ),
+                      ],
+                    );
+                  },
+                );
 
         }
       } else {
@@ -112,7 +112,7 @@ showDialog(
 
 
   Future<void> _login() async {
-    print('dahlah');
+    print('login func called');
     final String apiUrl = '${OrderinAppConstant.baseURL}/login';
     final response = await http.post(Uri.parse(apiUrl),
         body: jsonEncode({
