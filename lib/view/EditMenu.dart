@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:orderez/Widget/TextFieldComponent.dart';
-import 'package:orderez/Widget/ButtonWidget.dart';
 import 'package:orderez/Widget/TextFieldDetails.dart';
-import 'package:orderez/view/ListMenu.dart';
+import 'package:orderez/Widget/TextFieldEdit.dart';
 
-class DetailMenu extends StatefulWidget {
-  const DetailMenu({super.key});
+class EditMenu extends StatefulWidget {
+  const EditMenu({
+    super.key,
+    required this.idprod,
+    required this.name,
+    required this.jenis,
+  });
+
+  final String idprod;
+  final String name;
+  // final String price;
+  // final String stock;
+  final String jenis;
 
   @override
-  State<DetailMenu> createState() => _DetailMenuState();
+  State<EditMenu> createState() => _EditMenuState();
 }
 
-class _DetailMenuState extends State<DetailMenu> {
+class _EditMenuState extends State<EditMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,26 +39,48 @@ class _DetailMenuState extends State<DetailMenu> {
         title: const Padding(
             padding: EdgeInsets.only(left: 50),
             child: Text(
-              'Tambah Menu',
+              'Detail Menu',
               style:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             )),
       ),
-      body: BodyOfTambahMenu(),
+      body: BodyOfEditMenu(
+        idprod: widget.idprod,
+        name: widget.name,
+        jenis: widget.jenis,
+      ),
     );
   }
 }
 
-class BodyOfTambahMenu extends StatefulWidget {
-  const BodyOfTambahMenu({super.key});
+class BodyOfEditMenu extends StatefulWidget {
+  const BodyOfEditMenu({
+    super.key,
+    required this.idprod,
+    required this.name,
+    required this.jenis,
+  });
+
+  final String idprod;
+  final String name;
+  final String jenis;
 
   @override
-  State<BodyOfTambahMenu> createState() => _BodyOfTambahMenuState();
+  State<BodyOfEditMenu> createState() => _BodyOfEditMenu();
 }
 
-class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
-  final nameController = TextEditingController();
-  final hargaController = TextEditingController();
+class _BodyOfEditMenu extends State<BodyOfEditMenu> {
+
+  late TextEditingController nameController;
+  late TextEditingController hargaController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    nameController = TextEditingController(text: widget.name);
+    hargaController = TextEditingController();
+  }
 
   final ListMenuItems = [
     DropdownMenuItem(
@@ -75,6 +105,9 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
 
   @override
   Widget build(BuildContext context) {
+    categoryValue = widget.jenis;
+
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -98,8 +131,9 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
                     width: 20,
                   ),
                   Expanded(
-                      child: TextFieldDetails(
+                      child: TextFieldEdit(
                     controller: nameController,
+                    hintxt: widget.name,
                   )),
                 ],
               )),
@@ -154,5 +188,3 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
     );
   }
 }
-
-
