@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:orderez/koneksi/Firestoreget.dart';
 import 'package:orderez/koneksi/ListPage.dart';
 import 'package:orderez/utils/Utils.dart';
+import 'package:orderez/view/ListMenu.dart';
 import 'package:orderez/view/LoginUser.dart';
 // import 'package:orderez/koneksi/Lis';
 import 'package:orderez/firebase_options.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green.shade300),
         useMaterial3: true,
       ),
-      home: Pesanan(),
+      home: ListMenu(),
     );
   }
 }

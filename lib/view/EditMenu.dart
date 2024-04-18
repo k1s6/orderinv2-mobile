@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:orderez/Widget/ButtonDetailMenu.dart';
+import 'package:orderez/Widget/ButtonLogs.dart';
 import 'package:orderez/Widget/TextFieldDetails.dart';
 import 'package:orderez/Widget/TextFieldEdit.dart';
 
@@ -8,13 +11,16 @@ class EditMenu extends StatefulWidget {
     required this.idprod,
     required this.name,
     required this.jenis,
+    required this.price,
+    required this.deskripsi,
   });
 
   final String idprod;
   final String name;
-  // final String price;
+  final String price;
   // final String stock;
   final String jenis;
+  final String deskripsi;
 
   @override
   State<EditMenu> createState() => _EditMenuState();
@@ -48,6 +54,8 @@ class _EditMenuState extends State<EditMenu> {
         idprod: widget.idprod,
         name: widget.name,
         jenis: widget.jenis,
+        harga: widget.price,
+        deskripsi: widget.deskripsi,
       ),
     );
   }
@@ -59,27 +67,33 @@ class BodyOfEditMenu extends StatefulWidget {
     required this.idprod,
     required this.name,
     required this.jenis,
+    required this.harga,
+    required this.deskripsi,
   });
 
   final String idprod;
   final String name;
   final String jenis;
+  final String harga;
+  final String deskripsi;
 
   @override
   State<BodyOfEditMenu> createState() => _BodyOfEditMenu();
 }
 
 class _BodyOfEditMenu extends State<BodyOfEditMenu> {
-
   late TextEditingController nameController;
   late TextEditingController hargaController;
+  late TextEditingController descController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     nameController = TextEditingController(text: widget.name);
-    hargaController = TextEditingController();
+    hargaController = TextEditingController(text: widget.harga);
+    descController = TextEditingController(text: widget.deskripsi);
+    categoryValue = widget.jenis;
   }
 
   final ListMenuItems = [
@@ -105,8 +119,7 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
 
   @override
   Widget build(BuildContext context) {
-    categoryValue = widget.jenis;
-
+    // categoryValue = widget.jenis;
 
     return SingleChildScrollView(
       child: Column(
@@ -158,6 +171,23 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
             height: 10,
           ),
           Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  const Text('deskripsi'),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                      child: TextFieldDetails(
+                    controller: descController,
+                  )),
+                ],
+              )),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
@@ -176,13 +206,32 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
               ],
             ),
           ),
-          SizedBox(height: 100),
-          TextButton(
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+          SizedBox(height: 200),
+          Row(
+            children: [
+              SizedBox(
+                width: 40,
               ),
-              onPressed: () {},
-              child: const Text('Tambah'))
+              GestureDetector(
+                onTap: () => {Fluttertoast.showToast(msg: "clicked")},
+                child: const ButtonDetailMenu(
+                  color: Colors.red,
+                  btntype: "Hapus",
+                ),
+              ),
+              Expanded(child: SizedBox()),
+              GestureDetector(
+                onTap: () => {Fluttertoast.showToast(msg: "clicked")},
+                child: const ButtonDetailMenu(
+                  color: Colors.green,
+                  btntype: "Perbarui",
+                ),
+              ),
+              SizedBox(
+                width: 40,
+              ),
+            ],
+          ),
         ],
       ),
     );

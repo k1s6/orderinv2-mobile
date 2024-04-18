@@ -220,21 +220,25 @@ static Future<void> signIn(String username, String password, BuildContext contex
                 onTap: ()async {
                   await signIn(usernameController.text, passwordController.text, context);
                 },
-                child: Container(
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    decoration: const BoxDecoration(
-                        color: yellowcustom2,
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: const Center(
-                      child: Text(
-                        'Login',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                child: InkWell(
+                  borderRadius: BorderRadius.all(Radius.circular(18)),
+                  splashColor: Colors.transparent,
+                  child: Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      decoration: const BoxDecoration(
+                          color: yellowcustom2,
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: const Center(
+                        child: Text(
+                          'Login',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    )),
+                      )),
+                ),
               ),
             ],
           )),

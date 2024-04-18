@@ -11,6 +11,7 @@ class Product {
   num hargaProduct;
   String stockProduct;
   String jenisProduct;
+  String descProduct;
 
   Product({
     required this.kodeProduct,
@@ -19,6 +20,7 @@ class Product {
     required this.hargaProduct,
     required this.stockProduct,
     required this.jenisProduct,
+    required this.descProduct,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
@@ -28,6 +30,7 @@ class Product {
         hargaProduct: json["harga_product"]?.toDouble(),
         stockProduct: json["stock_product"],
         jenisProduct: json["jenis_product"],
+        descProduct: json["deskripsi"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -37,5 +40,6 @@ class Product {
         "harga_product": hargaProduct,
         "stock_product": stockProduct,
         "jenis_product": jenisProduct,
+        "deskripsi": descProduct,
       };
 }

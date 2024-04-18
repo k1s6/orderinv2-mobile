@@ -82,6 +82,7 @@ flutter:
   assets:
     - lib/images/app_logo.png
     - lib/images/tahugoreng.jpg
+    - lib/images/handleimg.png
     - lib/images/bg.png
     - lib/images/btn_add.png
     - lib/imgtugas/gbr1.jpg

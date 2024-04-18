@@ -32,8 +32,10 @@ class _PageMinumanState extends State<PageMinuman> {
   //   );
   // }
 
+  bool isDataNotEmpty = true;
+
   Future<void> getDataProduct(BuildContext context) async {
-    final String apiUrl = '${OrderinAppConstant.baseURL}/dataproduct';
+    final String apiUrl = '${OrderinAppConstant.productgetURL}/minuman';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
@@ -42,14 +44,14 @@ class _PageMinumanState extends State<PageMinuman> {
         final responseData = jsonDecode(response.body);
 
         if (responseData['status'] == 'success') {
-
           // tampilkan data
           List<dynamic> data = responseData['data'];
 
           listProd = data.map((item) => Product.fromJson(item)).toList();
-       
+        } else if (responseData['status'] == 'fail') {
+          print(responseData['message']);
+          isDataNotEmpty = false;
         } else {
-          // tampilkan error nya
           print('data gagal di dapat');
         }
       }
@@ -104,39 +106,42 @@ class _PageMinumanState extends State<PageMinuman> {
           }
 
           // jika data didapatkan
-          if (snapshot.hasData) {
+          if (snapshot.hasData && listProd.isNotEmpty) {
             return GridView.count(
               padding: const EdgeInsets.all(5),
               crossAxisCount: 2,
               children: listProd.map(
                 (drink) {
                   return _buildCard(
-                      drink.kodeProduct.toString(),
-                      drink.namaProduct ?? '',
-                      drink.hargaProduct.toString(),
-                      drink.gambarProduct ?? '',
-                      drink.stockProduct ?? '',
-                      );
+                    drink.kodeProduct.toString(),
+                    drink.namaProduct ?? '',
+                    drink.hargaProduct.toString(),
+                    drink.gambarProduct ?? '',
+                    drink.stockProduct ?? '',
+                    drink.descProduct ?? '',
+                  );
                 },
               ).toList(),
             );
-          }
-
-          return const Center(
-            child: Text(
-              'Something Wrong',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w600,
+          } else {
+            // jika data tidak ditemukan
+            return Center(
+              child: Text(
+                isDataNotEmpty ? 'Something Wrong' : 'Tidak Ada Data',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-          );
+            );
+          }
         },
       ),
     );
   }
 
-  Widget _buildCard(String IDproduct, String name, String price, String image, String stock) {
+  Widget _buildCard(
+      String IDproduct, String name, String price, String image, String stock, String deskripsi) {
     String isOutOfStock = stock;
 
     return Padding(
@@ -145,11 +150,20 @@ class _PageMinumanState extends State<PageMinuman> {
         margin: const EdgeInsets.all(3),
         child: InkWell(
           onTap: () {
-                  print('u clicked this2');
-                  Fluttertoast.showToast(msg: "STATUS : Inkwell Clicked ID ${IDproduct}");
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => EditMenu(idprod: IDproduct, name: name, jenis: "Minuman")));
-                },
+            print('u clicked this2');
+            Fluttertoast.showToast(
+                msg: "STATUS : Inkwell Clicked ID ${IDproduct}");
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => EditMenu(
+                          idprod: IDproduct,
+                          name: name,
+                          jenis: "Minuman",
+                          price: price,
+                          deskripsi: deskripsi,
+                        )));
+          },
           splashColor: Colors.white,
           child: Padding(
             padding:
@@ -160,9 +174,16 @@ class _PageMinumanState extends State<PageMinuman> {
                 Expanded(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(
-                      'lib/images/${image}',
-                      fit: BoxFit.cover,
+                    child: Center(
+                      child:
+                          Image.asset('lib/images/${image}', fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                        // default gambar
+                        return Image.asset(
+                          'lib/images/handleimg.png',
+                          fit: BoxFit.cover,
+                        );
+                      }),
                     ),
                   ),
                 ),
@@ -208,143 +229,6 @@ final List<Map<String, String>> dataList = [
   },
 ];
 
-
-
-// class PageMinuman extends StatefulWidget {
-//   const PageMinuman({super.key});
-
-//   @override
-//   State<PageMinuman> createState() => _PageMinumanState();
-// }
-
-// class _PageMinumanState extends State<PageMinuman> {
-//   late List<Product> listProd = [];
-
-//   Future<void> getDataProduct() async {
-//     final String apiUrl = '${OrderinAppConstant.baseURL}/dataproduct';
-
-//     try {
-//       final response = await http.get(Uri.parse(apiUrl));
-
-//       List<Product> dataobj = [];
-
-//       if (response.statusCode == 200) {
-//         final responseData = jsonDecode(response.body);
-
-//         if (responseData['status'] == 'success') {
-//           // tampilkan data
-//           List<dynamic> data = responseData['data'];
-
-//           listProd = data.map((item) => Product.fromJson(item)).toList();
-//           // });
-//           print(listProd);
-//           print(data);
-//           Logger().i('its works');
-//         } else {
-//           // tampilkan error nya
-//           print('data gagal di dapat');
-//         }
-//       }
-//     } catch (e) {
-//       showDialog(
-//         context: context,
-//         builder: (BuildContext context) {
-//           return AlertDialog(
-//             title: Text('Failed Get Data'),
-//             content: Text('error 02'),
-//             actions: <Widget>[
-//               TextButton(
-//                 onPressed: () {
-//                   Navigator.of(context).pop();
-//                 },
-//                 child: Text('OK'),
-//               ),
-//             ],
-//           );
-//         },
-//       );
-//     }
-//   }
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-//     //   try {
-//     getDataProduct();
-//       // } catch (ex) {
-//         // Fluttertoast.showToast(msg: "ERROR : ${ex.toString()}");
-//         // print("error => ${ex}");
-//     //   }
-//     // });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: GridView.count(
-//         padding: const EdgeInsets.all(5),
-//         crossAxisCount: 2,
-//         children: listProd.map((drink) {
-//           return _buildCard(
-//               drink.namaProduct ?? '',
-//               drink.hargaProduct.toString(),
-//               drink.gambarProduct ?? '',
-//               drink.stockProduct);
-//         }).toList(),
-//       ),
-//     );
-//   }
-
-//   Widget _buildCard(String name, String price, String image, String stock) {
-//     String isOutOfStock = stock;
-
-//     return Padding(
-//       padding: const EdgeInsets.all(6),
-//       child: Card(
-//         margin: const EdgeInsets.all(3),
-//         child: InkWell(
-//           onTap: isOutOfStock == "habis" ? () {} : () {},
-//           splashColor: Colors.white,
-//           child: Padding(
-//             padding: EdgeInsets.only(top: 15, left: 20, right: 20, bottom: 15),
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               children: <Widget>[
-//                 Expanded(
-//                   child: ClipRRect(
-//                     borderRadius: BorderRadius.circular(8.0),
-//                     child: Image.asset(
-//                       // 'lib/images/${image}',
-//                       'lib/images/tahugoreng.jpg',
-//                       fit: BoxFit.cover,
-//                     ),
-//                   ),
-//                 ),
-//                 SizedBox(height: 10),
-//                 Text(
-//                   name,
-//                   style: TextStyle(fontSize: 16.0),
-//                 ),
-//                 SizedBox(height: 10),
-//                 Text(
-//                   isOutOfStock== "habis" ? 'Stok Habis' : price,
-//                   style: TextStyle(
-//                     fontSize: 16.0,
-//                     fontWeight: isOutOfStock== "habis" ? FontWeight.bold : FontWeight.normal,
-//                     color: isOutOfStock== "habis" ? Colors.red : null,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// final List<Map<String, String>> dataList = [
 //   {
 //     'name': 'Tahu Goreng',
 //     'description': 'Ini makanan terbuat dari tahu',
