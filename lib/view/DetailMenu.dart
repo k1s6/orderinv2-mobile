@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:orderez/Widget/ButtonDetailMenu.dart';
 import 'package:orderez/Widget/TextFieldComponent.dart';
 import 'package:orderez/Widget/ButtonWidget.dart';
 import 'package:orderez/Widget/TextFieldDetails.dart';
+import 'package:orderez/Widget/TextFieldEdit.dart';
 import 'package:orderez/view/ListMenu.dart';
 
 class DetailMenu extends StatefulWidget {
@@ -51,6 +54,18 @@ class BodyOfTambahMenu extends StatefulWidget {
 class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
   final nameController = TextEditingController();
   final hargaController = TextEditingController();
+  final descController = TextEditingController();
+
+  static Future<void> storeData(
+    String nama, 
+    String harga, 
+    String deskripsi, 
+    String stock, 
+    BuildContext context
+    
+    ) async {
+      
+    }
 
   final ListMenuItems = [
     DropdownMenuItem(
@@ -98,7 +113,7 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
                     width: 20,
                   ),
                   Expanded(
-                      child: TextFieldDetails(
+                      child: TextFieldEdit(
                     controller: nameController,
                   )),
                 ],
@@ -124,6 +139,23 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
             height: 10,
           ),
           Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  const Text('deskripsi'),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                      child: TextFieldDetails(
+                    controller: descController,
+                  )),
+                ],
+              )),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
@@ -142,17 +174,18 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
               ],
             ),
           ),
-          SizedBox(height: 100),
-          TextButton(
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+          SizedBox(height: 200),
+          Center(
+            child: GestureDetector(
+              onTap: () => {Fluttertoast.showToast(msg: "clicked")},
+              child: const ButtonDetailMenu(
+                color: Colors.blue,
+                btntype: "Tambah",
               ),
-              onPressed: () {},
-              child: const Text('Tambah'))
+            ),
+          )
         ],
       ),
     );
   }
 }
-
-

@@ -4,11 +4,9 @@ class TextFieldEdit extends StatelessWidget {
   const TextFieldEdit({
     super.key,
     required this.controller,
-    required this.hintxt
   });
 
   final controller;
-  final String hintxt;
   // final String price;
   // final String stock;
   // final String jenis;
@@ -20,12 +18,10 @@ class TextFieldEdit extends StatelessWidget {
       child: TextField(
           controller: controller,
           textAlignVertical: TextAlignVertical.center,
-          // textAlign: TextAlign.center,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
             fillColor: Colors.white,
             filled: true,
-            // hintText: hintxt,
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
                 borderRadius: BorderRadius.all(Radius.circular(10))),

@@ -85,6 +85,8 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
   late TextEditingController nameController;
   late TextEditingController hargaController;
   late TextEditingController descController;
+  bool isAvailable = false;
+  bool light1 = true;
 
   @override
   void initState() {
@@ -95,6 +97,16 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
     descController = TextEditingController(text: widget.deskripsi);
     categoryValue = widget.jenis;
   }
+
+  final MaterialStateProperty<Icon?> thumbIcon =
+      MaterialStateProperty.resolveWith<Icon?>(
+    (Set<MaterialState> states) {
+      if (states.contains(MaterialState.selected)) {
+        return const Icon(Icons.check);
+      }
+      return const Icon(Icons.close);
+    },
+  );
 
   final ListMenuItems = [
     DropdownMenuItem(
@@ -136,6 +148,38 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
             height: 20,
           ),
           Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                const Text('status'),
+                const SizedBox(
+                  width: 20,
+                ),
+                Switch(
+                  thumbIcon: thumbIcon,
+                  value: light1,
+                  onChanged: (bool value) {
+                    setState(() {
+                      light1 = value;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  light1 ? 'Tersedia' : 'Habis',
+                  style: TextStyle(
+                    color: light1 ? Colors.green : Colors.red,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
@@ -146,7 +190,6 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
                   Expanded(
                       child: TextFieldEdit(
                     controller: nameController,
-                    hintxt: widget.name,
                   )),
                 ],
               )),
@@ -206,7 +249,7 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
               ],
             ),
           ),
-          SizedBox(height: 200),
+          SizedBox(height: 170),
           Row(
             children: [
               SizedBox(
@@ -233,6 +276,57 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class SliderButton extends StatelessWidget {
+  const SliderButton({Key? key, required this.isSliding, required this.onSlide})
+      : super(key: key);
+
+  final bool isSliding;
+  final ValueChanged<bool> onSlide;
+
+  @override
+  Widget build(BuildContext context) {
+    Color buttonColor = isSliding
+        ? Colors.green
+        : Colors.red; // Warna hijau jika isSliding true, warna merah jika false
+    return GestureDetector(
+      onHorizontalDragUpdate: (details) {
+        double dx = details.localPosition.dx;
+        if (dx < 0) dx = 0;
+        if (dx > 43) dx = 43;
+        double value = dx / 43;
+        onSlide(value > 0.5);
+      },
+      child: Container(
+        width: 43,
+        height: 18,
+        decoration: BoxDecoration(
+          color: isSliding
+              ? const Color.fromARGB(255, 158, 158, 158)
+              : const Color(0xFFD9D9D9),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Stack(
+          children: [
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 200),
+              left: isSliding ? 25 : 0,
+              child: Container(
+                width: 18,
+                height: 18,
+                decoration: BoxDecoration(
+                  color:
+                      buttonColor, // Menggunakan warna sesuai kondisi isSliding
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

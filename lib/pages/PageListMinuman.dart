@@ -212,23 +212,6 @@ class _PageMinumanState extends State<PageMinuman> {
   }
 }
 
-final List<Map<String, String>> dataList = [
-  {
-    'name': 'Tahu Goreng',
-    'description': 'Ini makanan terbuat dari tahu',
-    'price': 'Rp. 5000',
-    'image': 'tahugoreng.jpg',
-    'stock': '1',
-  },
-  {
-    'name': 'Pisang Goreng',
-    'description': 'Ini makanan terbuat dari pisang',
-    'price': 'Rp. 4000',
-    'image': 'tahugoreng.jpg',
-    'stock': '0',
-  },
-];
-
 //   {
 //     'name': 'Tahu Goreng',
 //     'description': 'Ini makanan terbuat dari tahu',
