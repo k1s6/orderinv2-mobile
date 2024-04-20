@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -6,7 +9,9 @@ import 'package:orderez/Widget/TextFieldComponent.dart';
 import 'package:orderez/Widget/ButtonWidget.dart';
 import 'package:orderez/Widget/TextFieldDetails.dart';
 import 'package:orderez/Widget/TextFieldEdit.dart';
+import 'package:orderez/configuration/Constant.dart';
 import 'package:orderez/view/ListMenu.dart';
+import 'package:http/http.dart' as http;
 
 class DetailMenu extends StatefulWidget {
   const DetailMenu({super.key});
@@ -56,33 +61,120 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
   final hargaController = TextEditingController();
   final descController = TextEditingController();
 
-  static Future<void> storeData(
-    String nama, 
-    String harga, 
-    String deskripsi, 
-    String stock, 
-    BuildContext context
-    
-    ) async {
-      
+  static Future<void> storeData(String nama, String harga, String deskripsi,
+      String stock, String jenis, String gambar, BuildContext context) async {
+    final String apiUrl = '${OrderinAppConstant.uploadURL}/store';
+
+    try {
+      // Kirim permintaan HTTP POST ke server
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: {
+          "nama_product": nama,
+          "deskripsi": deskripsi,
+          "stock_product": stock,
+          "harga_product": harga,
+          "jenis_product": jenis,
+          "gambar_product": gambar
+        }, // raw body
+      );
+
+      // Periksa status code respons dari server
+      if (response.statusCode == 200) {
+
+        // Decode respons JSON
+        final responseData = json.decode(response.body);
+
+        // Periksa status dalam respons
+        if (responseData['status'] == 'success') {
+          // Jika response success eksekusi kode dibawah
+
+          Fluttertoast.showToast(msg: 'data berhasil diupload');
+          
+          Timer(Duration(seconds: 2), () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => ListMenu()),
+            );
+          });
+          
+        } else {
+          // Jika upload data gagal, dapatkan pesan error
+          String errorMessage = responseData['message'];
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Upload Data Gagal'),
+                content: Text(responseData['message']),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Upload Data Gagal'),
+              content: Text('error 01'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Upload Data Gagal'),
+            content: Text('error 02'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
+  }
 
   final ListMenuItems = [
-    DropdownMenuItem(
-      child: Text('Makanan'),
+    const DropdownMenuItem(
       value: "Makanan",
+      child: Text('Makanan'),
     ),
-    DropdownMenuItem(
-      child: Text('Minuman'),
+    const DropdownMenuItem(
       value: "Minuman",
+      child: Text('Minuman'),
     ),
-    DropdownMenuItem(
-      child: Text('Snack'),
+    const DropdownMenuItem(
       value: "Snack",
+      child: Text('Snack'),
     ),
-    DropdownMenuItem(
-      child: Text('Steak'),
+    const DropdownMenuItem(
       value: "Steak",
+      child: Text('Steak'),
     ),
   ];
 
@@ -177,7 +269,10 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
           SizedBox(height: 200),
           Center(
             child: GestureDetector(
-              onTap: () => {Fluttertoast.showToast(msg: "clicked")},
+              onTap: () => {
+                // Fluttertoast.showToast(msg: "clicked")
+                storeData(nameController.text, hargaController.text, descController.text, "tersedia", categoryValue, "null", context)
+              },
               child: const ButtonDetailMenu(
                 color: Colors.blue,
                 btntype: "Tambah",
