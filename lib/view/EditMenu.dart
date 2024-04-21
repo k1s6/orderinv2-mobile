@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:orderez/Widget/ButtonDetailMenu.dart';
 import 'package:orderez/Widget/ButtonLogs.dart';
 import 'package:orderez/Widget/TextFieldDetails.dart';
 import 'package:orderez/Widget/TextFieldEdit.dart';
+import 'package:orderez/configuration/Constant.dart';
+import 'package:http/http.dart' as http;
 
 class EditMenu extends StatefulWidget {
   const EditMenu({
@@ -13,14 +17,15 @@ class EditMenu extends StatefulWidget {
     required this.jenis,
     required this.price,
     required this.deskripsi,
+    required this.stock,
   });
 
   final String idprod;
   final String name;
   final String price;
-  // final String stock;
   final String jenis;
   final String deskripsi;
+  final String stock;
 
   @override
   State<EditMenu> createState() => _EditMenuState();
@@ -56,6 +61,7 @@ class _EditMenuState extends State<EditMenu> {
         jenis: widget.jenis,
         harga: widget.price,
         deskripsi: widget.deskripsi,
+        stock: widget.stock,
       ),
     );
   }
@@ -69,6 +75,7 @@ class BodyOfEditMenu extends StatefulWidget {
     required this.jenis,
     required this.harga,
     required this.deskripsi,
+    required this.stock,
   });
 
   final String idprod;
@@ -76,6 +83,7 @@ class BodyOfEditMenu extends StatefulWidget {
   final String jenis;
   final String harga;
   final String deskripsi;
+  final String stock;
 
   @override
   State<BodyOfEditMenu> createState() => _BodyOfEditMenu();
@@ -85,8 +93,9 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
   late TextEditingController nameController;
   late TextEditingController hargaController;
   late TextEditingController descController;
-  bool isAvailable = false;
-  bool light1 = true;
+  late bool isAvailable;
+  late bool light1;
+  
 
   @override
   void initState() {
@@ -95,8 +104,108 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
     nameController = TextEditingController(text: widget.name);
     hargaController = TextEditingController(text: widget.harga);
     descController = TextEditingController(text: widget.deskripsi);
+    light1 = widget.stock == "tersedia" ? true : false;
     categoryValue = widget.jenis;
   }
+
+  static Future<void> updateData(String nama, String harga, String deskripsi,
+      String stock, String jenis, String gambar, String kodeprod, BuildContext context) async {
+    final String apiUrl = '${OrderinAppConstant.updateURL}/${kodeprod}';
+
+    try {
+      // Kirim permintaan HTTP POST ke server
+      final response = await http.put(
+        Uri.parse(apiUrl),
+        body: {
+          "nama_product": nama,
+          "deskripsi": deskripsi,
+          "stock_product": stock,
+          "harga_product": harga,
+          "jenis_product": jenis,
+          "gambar_product": gambar
+        }, // raw body
+      );
+
+      // Periksa status code respons dari server
+      if (response.statusCode == 200) {
+
+        // Decode respons JSON
+        final responseData = json.decode(response.body);
+
+        // Periksa status dalam respons
+        if (responseData['status'] == 'success') {
+          // Jika response success eksekusi kode dibawah
+
+          Fluttertoast.showToast(msg: 'data berhasil diubah');
+          
+          // Timer(Duration(seconds: 2), () {
+          //   Navigator.pushReplacement(
+          //     context,
+          //     MaterialPageRoute(builder: (context) => ListMenu()),
+          //   );
+          // });
+          
+        } else {
+          // Jika upload data gagal, dapatkan pesan error
+          String errorMessage = responseData['message'];
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Update Data Gagal'),
+                content: Text(responseData['message']),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Update Data Gagal'),
+              content: Text('error 01'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Update Data Gagal'),
+            content: Text('error 02'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
 
   final MaterialStateProperty<Icon?> thumbIcon =
       MaterialStateProperty.resolveWith<Icon?>(
@@ -264,7 +373,10 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
               ),
               Expanded(child: SizedBox()),
               GestureDetector(
-                onTap: () => {Fluttertoast.showToast(msg: "clicked")},
+                onTap: () => {
+                  // Fluttertoast.showToast(msg: "clicked")
+                  updateData(nameController.text, hargaController.text, descController.text, light1 == true ? "tersedia" : "habis", categoryValue, "null", widget.idprod, context)
+                },
                 child: const ButtonDetailMenu(
                   color: Colors.green,
                   btntype: "Perbarui",

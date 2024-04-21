@@ -162,6 +162,7 @@ class _PageMinumanState extends State<PageMinuman> {
                           jenis: "Minuman",
                           price: price,
                           deskripsi: deskripsi,
+                          stock: stock,
                         )));
           },
           splashColor: Colors.white,
