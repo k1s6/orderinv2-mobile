@@ -116,7 +116,7 @@ class _PageMinumanState extends State<PageMinuman> {
                     drink.kodeProduct.toString(),
                     drink.namaProduct ?? '',
                     drink.hargaProduct.toString(),
-                    drink.gambarProduct ?? '',
+                    drink.gambarProduct,
                     drink.stockProduct ?? '',
                     drink.descProduct ?? '',
                   );
@@ -140,9 +140,11 @@ class _PageMinumanState extends State<PageMinuman> {
     );
   }
 
-  Widget _buildCard(
-      String IDproduct, String name, String price, String image, String stock, String deskripsi) {
+  Widget _buildCard(String IDproduct, String name, String price, String image,
+      String stock, String deskripsi) {
     String isOutOfStock = stock;
+
+    // image == null ? "aaa" : image;
 
     return Padding(
       padding: const EdgeInsets.all(6),

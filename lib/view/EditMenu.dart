@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:orderez/Widget/TextFieldDetails.dart';
 import 'package:orderez/Widget/TextFieldEdit.dart';
 import 'package:orderez/configuration/Constant.dart';
 import 'package:http/http.dart' as http;
+import 'package:orderez/view/ListMenu.dart';
 
 class EditMenu extends StatefulWidget {
   const EditMenu({
@@ -95,7 +97,6 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
   late TextEditingController descController;
   late bool isAvailable;
   late bool light1;
-  
 
   @override
   void initState() {
@@ -108,8 +109,15 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
     categoryValue = widget.jenis;
   }
 
-  static Future<void> updateData(String nama, String harga, String deskripsi,
-      String stock, String jenis, String gambar, String kodeprod, BuildContext context) async {
+  static Future<void> updateData(
+      String nama,
+      String harga,
+      String deskripsi,
+      String stock,
+      String jenis,
+      String gambar,
+      String kodeprod,
+      BuildContext context) async {
     final String apiUrl = '${OrderinAppConstant.updateURL}/${kodeprod}';
 
     try {
@@ -128,7 +136,6 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
 
       // Periksa status code respons dari server
       if (response.statusCode == 200) {
-
         // Decode respons JSON
         final responseData = json.decode(response.body);
 
@@ -137,14 +144,13 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
           // Jika response success eksekusi kode dibawah
 
           Fluttertoast.showToast(msg: 'data berhasil diubah');
-          
+
           // Timer(Duration(seconds: 2), () {
           //   Navigator.pushReplacement(
           //     context,
           //     MaterialPageRoute(builder: (context) => ListMenu()),
           //   );
           // });
-          
         } else {
           // Jika upload data gagal, dapatkan pesan error
           String errorMessage = responseData['message'];
@@ -206,6 +212,92 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
     }
   }
 
+  static Future<void> deleteData(String kodeprod, BuildContext context) async {
+    final String apiUrl = '${OrderinAppConstant.delprodURL}/${kodeprod}';
+
+    try {
+      // Kirim permintaan HTTP POST ke server
+      final response = await http.get(
+        Uri.parse(apiUrl),
+      );
+
+      // Periksa status code respons dari server
+      if (response.statusCode == 200) {
+        // Decode respons JSON
+        final responseData = json.decode(response.body);
+
+        // Periksa status dalam respons
+        if (responseData['status'] == 'success') {
+          // Jika response success eksekusi kode dibawah
+
+          Fluttertoast.showToast(msg: 'data berhasil dihapus');
+
+          Timer(Duration(seconds: 2), () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => ListMenu()),
+            );
+          });
+        } else {
+          // Jika upload data gagal, dapatkan pesan error
+          String errorMessage = responseData['message'];
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Update Data Gagal'),
+                content: Text(responseData['message']),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Delete Data Gagal'),
+              content: Text('error 01'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Delete Data Gagal'),
+            content: Text('error 02'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   final MaterialStateProperty<Icon?> thumbIcon =
       MaterialStateProperty.resolveWith<Icon?>(
@@ -365,7 +457,10 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
                 width: 40,
               ),
               GestureDetector(
-                onTap: () => {Fluttertoast.showToast(msg: "clicked")},
+                onTap: () => {
+                  // Fluttertoast.showToast(msg: "clicked")
+                  deleteData(widget.idprod, context)
+                },
                 child: const ButtonDetailMenu(
                   color: Colors.red,
                   btntype: "Hapus",
@@ -375,7 +470,15 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
               GestureDetector(
                 onTap: () => {
                   // Fluttertoast.showToast(msg: "clicked")
-                  updateData(nameController.text, hargaController.text, descController.text, light1 == true ? "tersedia" : "habis", categoryValue, "null", widget.idprod, context)
+                  updateData(
+                      nameController.text,
+                      hargaController.text,
+                      descController.text,
+                      light1 == true ? "tersedia" : "habis",
+                      categoryValue,
+                      "null",
+                      widget.idprod,
+                      context)
                 },
                 child: const ButtonDetailMenu(
                   color: Colors.green,
