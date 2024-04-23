@@ -178,15 +178,20 @@ class _PageMinumanState extends State<PageMinuman> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Center(
-                      child:
-                          Image.asset('lib/images/${image}', fit: BoxFit.cover,
+                      child: image.isEmpty
+                          ? Image.asset(
+                              'lib/images/handleimg.png',
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset('lib/images/${image}',
+                              fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
-                        // default gambar
-                        return Image.asset(
-                          'lib/images/handleimg.png',
-                          fit: BoxFit.cover,
-                        );
-                      }),
+                              // default gambar
+                              return Image.asset(
+                                'lib/images/handleimg.png',
+                                fit: BoxFit.cover,
+                              );
+                            }),
                     ),
                   ),
                 ),

@@ -76,6 +76,52 @@ class _PageMakananState extends State<PageMakanan> {
     }
   }
 
+  bool isDataNotEmpty1 = true;
+
+  Future<void> getDataProductFind(
+      BuildContext context, String jenis, String keyword) async {
+    final String apiUrl =
+        '${OrderinAppConstant.productgetfindURL}/$jenis?keyword=$keyword';
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData['status'] == 'success') {
+          // tampilkan data
+          List<dynamic> data = responseData['data'];
+
+          listProd = data.map((item) => Product.fromJson(item)).toList();
+        } else if (responseData['status'] == 'fail') {
+          print(responseData['message']);
+          isDataNotEmpty1 = false;
+        } else {
+          print('data gagal di dapat');
+        }
+      }
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Failed Get Data'),
+            content: Text('error 02'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   Future<List<Product>> products(BuildContext context) async {
     await getDataProduct(context);
     return listProd;
@@ -83,65 +129,76 @@ class _PageMakananState extends State<PageMakanan> {
 
   @override
   Widget build(BuildContext context) {
+    final SearchController = TextEditingController();
+
     return Scaffold(
-      body: FutureBuilder<List<Product>?>(
-        future: products(context),
-        builder: (context, snapshot) {
-          // dalam loading
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CupertinoActivityIndicator());
-          }
+      body: Column(
+        children: [
+          SearchprodWidget(
+            controller: SearchController,
+          ),
+          Expanded(
+            child: FutureBuilder<List<Product>?>(
+              future: products(context),
+              builder: (context, snapshot) {
+                // dalam loading
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CupertinoActivityIndicator());
+                }
 
-          // jika error
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                "Error : ${snapshot.error}",
-                style: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            );
-          }
-
-          // jika data didapatkan
-          if (snapshot.hasData && listProd.isNotEmpty) {
-            return GridView.count(
-              padding: const EdgeInsets.all(5),
-              crossAxisCount: 2,
-              children: listProd.map(
-                (drink) {
-                  return _buildCard(
-                    drink.kodeProduct.toString(),
-                    drink.namaProduct ?? '',
-                    drink.hargaProduct.toString(),
-                    drink.gambarProduct ?? '',
-                    drink.stockProduct ?? '',
-                    drink.descProduct ?? '',
+                // jika error
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      "Error : ${snapshot.error}",
+                      style: const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   );
-                },
-              ).toList(),
-            );
-          } else {
-            // jika data tidak ditemukan
-            return Center(
-              child: Text(
-                isDataNotEmpty ? 'Something Wrong' : 'Tidak Ada Data',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            );
-          }
-        },
+                }
+
+                // jika data didapatkan
+                if (snapshot.hasData && listProd.isNotEmpty) {
+                  return GridView.count(
+                    padding: const EdgeInsets.all(5),
+                    crossAxisCount: 2,
+                    children: listProd.map(
+                      (drink) {
+                        return _buildCard(
+                          drink.kodeProduct.toString(),
+                          drink.namaProduct ?? '',
+                          drink.hargaProduct.toString(),
+                          drink.gambarProduct ?? '',
+                          drink.stockProduct ?? '',
+                          drink.descProduct ?? '',
+                        );
+                      },
+                    ).toList(),
+                  );
+                } else {
+                  // jika data tidak ditemukan
+                  return Center(
+                    child: Text(
+                      isDataNotEmpty ? 'Something Wrong' : 'Tidak Ada Data',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildCard(
-      String IDproduct, String name, String price, String image, String stock, String deskripsi) {
+  Widget _buildCard(String IDproduct, String name, String price, String image,
+      String stock, String deskripsi) {
     String isOutOfStock = stock;
 
     return Padding(
@@ -213,18 +270,35 @@ class _PageMakananState extends State<PageMakanan> {
   }
 }
 
-//   {
-//     'name': 'Tahu Goreng',
-//     'description': 'Ini makanan terbuat dari tahu',
-//     'price': 'Rp. 5000',
-//     'image': 'tahugoreng.jpg',
-//     'stock': '1',
-//   },
-//   {
-//     'name': 'Pisang Goreng',
-//     'description': 'Ini makanan terbuat dari pisang',
-//     'price': 'Rp. 4000',
-//     'image': 'tahugoreng.jpg',
-//     'stock': '0',
-//   },
-// ];
+class SearchprodWidget extends StatelessWidget {
+  const SearchprodWidget({super.key, required this.controller});
+
+  final controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(30),
+      child: TextField(
+        controller: controller,
+        textAlignVertical: TextAlignVertical.center,
+        // textAlign: TextAlign.center,
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+          prefixIcon: Icon(Icons.search),
+          fillColor: Colors.white,
+          filled: true,
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          focusedBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        ),
+        onEditingComplete: () {
+          // showOk();
+        },
+      ),
+    );
+    ;
+  }
+}
