@@ -13,10 +13,30 @@ class PageMakanan extends StatefulWidget {
 
   @override
   State<PageMakanan> createState() => _PageMakananState();
+
+  void updateFindClicked(bool value) {
+    updateFindClicked(value);
+  }
 }
 
 class _PageMakananState extends State<PageMakanan> {
   late List<Product> listProd = [];
+
+  late bool findclicked = false;
+
+  late String valuekey = "";
+
+  @override
+  void initState() {
+    super.initState();
+    findclicked;
+  }
+
+  void updateclick(bool value) {
+    setState(() {
+      findclicked = true;
+    });
+  }
 
   // @override
   // void initState() {
@@ -100,6 +120,11 @@ class _PageMakananState extends State<PageMakanan> {
         } else {
           print('data gagal di dapat');
         }
+      } else if (response.statusCode == 404) {
+        listProd = [];
+        isDataNotEmpty = false;
+        // print('statuscode 404');
+        Fluttertoast.showToast(msg: '404 statuscode');
       }
     } catch (e) {
       showDialog(
@@ -127,6 +152,14 @@ class _PageMakananState extends State<PageMakanan> {
     return listProd;
   }
 
+  Future<List<Product>> productsfind(
+      BuildContext context, String keyword) async {
+    // findclicked = true;
+    Fluttertoast.showToast(msg: 'productsfind...');
+    await getDataProductFind(context, "makanan", valuekey);
+    return listProd;
+  }
+
   @override
   Widget build(BuildContext context) {
     final SearchController = TextEditingController();
@@ -134,12 +167,38 @@ class _PageMakananState extends State<PageMakanan> {
     return Scaffold(
       body: Column(
         children: [
-          SearchprodWidget(
-            controller: SearchController,
+          Padding(
+            padding: EdgeInsets.all(12),
+            child: TextField(
+              controller: SearchController,
+              textAlignVertical: TextAlignVertical.center,
+              // textAlign: TextAlign.center,
+              decoration: const InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                prefixIcon: Icon(Icons.search),
+                hintText: "Cari Menu...",
+                fillColor: Color.fromARGB(255, 245, 245, 245),
+                filled: true,
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black)),
+              ),
+              onEditingComplete: () {
+                setState(() {
+                  findclicked = true;
+                  valuekey = SearchController.text;
+                });
+              },
+            ),
           ),
           Expanded(
             child: FutureBuilder<List<Product>?>(
-              future: products(context),
+              future: findclicked == true
+                  ? productsfind(context, SearchController.text)
+                  : products(context),
               builder: (context, snapshot) {
                 // dalam loading
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -270,35 +329,42 @@ class _PageMakananState extends State<PageMakanan> {
   }
 }
 
-class SearchprodWidget extends StatelessWidget {
-  const SearchprodWidget({super.key, required this.controller});
+// class SearchprodWidget extends StatelessWidget {
+//   const SearchprodWidget({super.key, required this.controller});
 
-  final controller;
+//   final controller;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(30),
-      child: TextField(
-        controller: controller,
-        textAlignVertical: TextAlignVertical.center,
-        // textAlign: TextAlign.center,
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-          prefixIcon: Icon(Icons.search),
-          fillColor: Colors.white,
-          filled: true,
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey),
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          focusedBorder:
-              OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-        ),
-        onEditingComplete: () {
-          // showOk();
-        },
-      ),
-    );
-    ;
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: EdgeInsets.all(12),
+//       child: TextField(
+//         controller: controller,
+//         textAlignVertical: TextAlignVertical.center,
+//         // textAlign: TextAlign.center,
+//         decoration: const InputDecoration(
+//           contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+//           prefixIcon: Icon(Icons.search),
+//           hintText: "Search Here...",
+//           fillColor: Color.fromARGB(255, 245, 245, 245),
+//           filled: true,
+//           enabledBorder: OutlineInputBorder(
+//               borderSide: BorderSide(color: Colors.grey),
+//               borderRadius: BorderRadius.all(Radius.circular(10))),
+//           focusedBorder:
+//               OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+//         ),
+//         onEditingComplete: () {
+//           _PageMakananState? pageState = context.findAncestorStateOfType<_PageMakananState>();
+//             if (pageState != null) {
+//               // Memanggil setState dari widget PageMakanan untuk mengubah nilai findclicked menjadi true
+//               pageState.setState(() {
+//                 pageState.findclicked = true;
+//               });
+//             }
+//         },
+//       ),
+//     );
+//     ;
+//   }
+// }

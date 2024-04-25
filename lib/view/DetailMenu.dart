@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:orderez/Widget/ButtonDetailMenu.dart';
 import 'package:orderez/Widget/TextFieldComponent.dart';
 import 'package:orderez/Widget/ButtonWidget.dart';
@@ -179,6 +180,17 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
   ];
 
   String categoryValue = "Makanan";
+
+  //  Future<void> _pickImage() async {
+  //   final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
+  //   setState(() {
+
+
+  //     if (pickedFile != null) {
+  //       _imageFile = File(pickedFile.path);
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -212,6 +212,40 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
     }
   }
 
+  Future<void> confirmDeleteData(BuildContext context, String idprod) async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Konfirmasi'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Apakah Anda yakin ingin menghapus data ini?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Batal'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                deleteData(idprod, context);
+              },
+              child: Text('Hapus'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   static Future<void> deleteData(String kodeprod, BuildContext context) async {
     final String apiUrl = '${OrderinAppConstant.delprodURL}/${kodeprod}';
 
@@ -459,7 +493,8 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
               GestureDetector(
                 onTap: () => {
                   // Fluttertoast.showToast(msg: "clicked")
-                  deleteData(widget.idprod, context)
+                  // deleteData(widget.idprod, context)
+                  confirmDeleteData(context, widget.idprod)
                 },
                 child: const ButtonDetailMenu(
                   color: Colors.red,
