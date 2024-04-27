@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -58,6 +60,8 @@ class BodyOfTambahMenu extends StatefulWidget {
 }
 
 class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
+  File? _imageFile;
+  String? _imgName;
   final nameController = TextEditingController();
   final hargaController = TextEditingController();
   final descController = TextEditingController();
@@ -82,7 +86,6 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
 
       // Periksa status code respons dari server
       if (response.statusCode == 200) {
-
         // Decode respons JSON
         final responseData = json.decode(response.body);
 
@@ -91,14 +94,13 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
           // Jika response success eksekusi kode dibawah
 
           Fluttertoast.showToast(msg: 'data berhasil diupload');
-          
+
           Timer(Duration(seconds: 2), () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => ListMenu()),
             );
           });
-          
         } else {
           // Jika upload data gagal, dapatkan pesan error
           String errorMessage = responseData['message'];
@@ -160,6 +162,50 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
     }
   }
 
+  Future<void> uploadImage() async {
+    if (_imageFile != null) {
+      final String apiUrl = OrderinAppConstant.upimgURL;
+
+      var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+
+      request.files
+          .add(await http.MultipartFile.fromPath('image', _imageFile!.path));
+
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        // Read response stream as String
+        String responseBody = await response.stream.bytesToString();
+
+        // Decode response JSON
+        final responseData = json.decode(responseBody);
+
+        // Check status in the response
+        if (responseData['status'] == 'success') {
+          // If response success, execute code below
+          Fluttertoast.showToast(msg: 'Data berhasil diupload');
+          setState(() {
+            this._imgName = responseData['name'];
+          });
+        } else {
+          // Handle other cases when status is not success
+          Fluttertoast.showToast(msg: 'Gagal mengupload data');
+        }
+      } else {
+        // Handle other status codes
+        Fluttertoast.showToast(msg: 'Gagal mengupload data');
+      }
+    } else {
+      Fluttertoast.showToast(msg: "No image selected");
+    }
+  }
+
+  Future<void> uploadandstore() async {
+    await uploadImage();
+    storeData(nameController.text, hargaController.text, descController.text,
+        "tersedia", categoryValue, _imgName ?? "null", context);
+  }
+
   final ListMenuItems = [
     const DropdownMenuItem(
       value: "Makanan",
@@ -181,29 +227,54 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
 
   String categoryValue = "Makanan";
 
-  //  Future<void> _pickImage() async {
-  //   final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
-  //   setState(() {
+  Future<void> _pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
 
+      if (image == null) return;
 
-  //     if (pickedFile != null) {
-  //       _imageFile = File(pickedFile.path);
-  //     }
-  //   });
-  // }
+      final imageTemporary = File(image.path);
+      setState(() {
+        this._imageFile = imageTemporary;
+      });
+    } on PlatformException catch (e) {
+      Fluttertoast.showToast(msg: 'failed pick image $e');
+    }
+
+    // setState(() {
+
+    //   if (pickedFile != null) {
+    //     _imageFile = File(pickedFile.path);
+    //   }
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const Icon(
-            Icons.image,
-            size: 170,
-          ),
-          const Text(
-            'Edit',
-            style: TextStyle(color: Colors.blue),
+          _imageFile != null
+              ? Image.file(
+                  _imageFile!,
+                  width: 170,
+                  height: 170,
+                  fit: BoxFit.cover,
+                )
+              : const Icon(
+                  Icons.image,
+                  size: 170,
+                ),
+          GestureDetector(
+            onTap: () => _pickImage(),
+            child: const Text(
+              'Edit',
+              style: TextStyle(color: Colors.blue),
+            ),
+            // const Icon(
+            //   Icons.edit,
+            //   color: Colors.blue,
+            // ),
           ),
           const SizedBox(
             height: 20,
@@ -281,10 +352,7 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
           SizedBox(height: 200),
           Center(
             child: GestureDetector(
-              onTap: () => {
-                // Fluttertoast.showToast(msg: "clicked")
-                storeData(nameController.text, hargaController.text, descController.text, "tersedia", categoryValue, "null", context)
-              },
+              onTap: () => {uploadandstore()},
               child: const ButtonDetailMenu(
                 color: Colors.blue,
                 btntype: "Tambah",
