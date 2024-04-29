@@ -292,9 +292,8 @@ class _PageMakananState extends State<PageMakanan> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Center(
-                      child:
-                          Image.asset('lib/images/${image}', fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
+                      child: Image.network('${image}', fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
                         // default gambar
                         return Image.asset(
                           'lib/images/handleimg.png',
