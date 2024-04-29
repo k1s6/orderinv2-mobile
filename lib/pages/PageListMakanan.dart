@@ -177,7 +177,7 @@ class _PageMakananState extends State<PageMakanan> {
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 prefixIcon: Icon(Icons.search),
-                hintText: "Cari Menu...",
+                hintText: "Cari Makanan...",
                 fillColor: Color.fromARGB(255, 245, 245, 245),
                 filled: true,
                 enabledBorder: OutlineInputBorder(
@@ -194,6 +194,7 @@ class _PageMakananState extends State<PageMakanan> {
               },
             ),
           ),
+
           Expanded(
             child: FutureBuilder<List<Product>?>(
               future: findclicked == true
