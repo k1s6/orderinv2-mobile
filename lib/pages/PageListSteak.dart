@@ -279,6 +279,7 @@ class _PageSteakState extends State<PageSteak> {
                           price: price,
                           deskripsi: deskripsi,
                           stock: stock,
+                          imgplaceholder: image,
                         )));
           },
           splashColor: Colors.white,
@@ -293,8 +294,8 @@ class _PageSteakState extends State<PageSteak> {
                     borderRadius: BorderRadius.circular(8.0),
                     child: Center(
                       child:
-                          Image.asset('lib/images/${image}', fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
+                          Image.network('${image}', fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
                         // default gambar
                         return Image.asset(
                           'lib/images/handleimg.png',

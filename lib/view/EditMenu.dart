@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:orderez/Widget/ButtonDetailMenu.dart';
 import 'package:orderez/Widget/ButtonLogs.dart';
 import 'package:orderez/Widget/TextFieldDetails.dart';
@@ -12,15 +15,15 @@ import 'package:http/http.dart' as http;
 import 'package:orderez/view/ListMenu.dart';
 
 class EditMenu extends StatefulWidget {
-  const EditMenu({
-    super.key,
-    required this.idprod,
-    required this.name,
-    required this.jenis,
-    required this.price,
-    required this.deskripsi,
-    required this.stock,
-  });
+  const EditMenu(
+      {super.key,
+      required this.idprod,
+      required this.name,
+      required this.jenis,
+      required this.price,
+      required this.deskripsi,
+      required this.stock,
+      required this.imgplaceholder});
 
   final String idprod;
   final String name;
@@ -28,6 +31,7 @@ class EditMenu extends StatefulWidget {
   final String jenis;
   final String deskripsi;
   final String stock;
+  final String imgplaceholder;
 
   @override
   State<EditMenu> createState() => _EditMenuState();
@@ -64,6 +68,7 @@ class _EditMenuState extends State<EditMenu> {
         harga: widget.price,
         deskripsi: widget.deskripsi,
         stock: widget.stock,
+        imgplaceholder: widget.imgplaceholder,
       ),
     );
   }
@@ -78,6 +83,7 @@ class BodyOfEditMenu extends StatefulWidget {
     required this.harga,
     required this.deskripsi,
     required this.stock,
+    required this.imgplaceholder,
   });
 
   final String idprod;
@@ -86,12 +92,17 @@ class BodyOfEditMenu extends StatefulWidget {
   final String harga;
   final String deskripsi;
   final String stock;
+  final String imgplaceholder;
 
   @override
   State<BodyOfEditMenu> createState() => _BodyOfEditMenu();
 }
 
 class _BodyOfEditMenu extends State<BodyOfEditMenu> {
+  File? _imageFile;
+  String? _imgName;
+
+  late bool imgcheck;
   late TextEditingController nameController;
   late TextEditingController hargaController;
   late TextEditingController descController;
@@ -102,6 +113,7 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    imgcheck = false;
     nameController = TextEditingController(text: widget.name);
     hargaController = TextEditingController(text: widget.harga);
     descController = TextEditingController(text: widget.deskripsi);
@@ -333,6 +345,91 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
     }
   }
 
+  Future<void> _pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (image == null) return;
+
+      final imageTemporary = File(image.path);
+      imgcheck = true;
+
+      setState(() {
+        this._imageFile = imageTemporary;
+      });
+
+      Fluttertoast.showToast(msg: 'image picked');
+    } on PlatformException catch (e) {
+      Fluttertoast.showToast(msg: 'failed pick image $e');
+    }
+  }
+
+  Future<void> uploadImage() async {
+    if (_imageFile != null && imgcheck == true) {
+      final String apiUrl = OrderinAppConstant.upimgURL;
+
+      var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+
+      request.files
+          .add(await http.MultipartFile.fromPath('image', _imageFile!.path));
+
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        // Read response stream as String
+        String responseBody = await response.stream.bytesToString();
+
+        // Decode response JSON
+        final responseData = json.decode(responseBody);
+
+        // Check status in the response
+        if (responseData['status'] == 'success') {
+          // If response success, execute code below
+          Fluttertoast.showToast(msg: 'Data berhasil diupload');
+          setState(() {
+            this._imgName = responseData['name'];
+          });
+        } else {
+          // Handle other cases when status is not success
+          Fluttertoast.showToast(msg: 'Gagal mengupload data');
+        }
+      } else {
+        // Handle other status codes
+        Fluttertoast.showToast(msg: 'Gagal mengupload data');
+      }
+    } else {
+      String imageName = getImageNameFromUrl(widget.imgplaceholder);
+      Fluttertoast.showToast(msg: "No image selected");
+      setState(() {
+        this._imgName = imageName;
+      });
+    }
+  }
+
+  String getImageNameFromUrl(String url) {
+    // Split the URL by slashes to get individual components
+    List<String> urlParts = url.split('/');
+
+    // The image name is usually the last component in the URL
+    String imageName = urlParts.last;
+
+    return imageName;
+  }
+
+  Future<void> updateandupload() async {
+    String imageName = getImageNameFromUrl(widget.imgplaceholder);
+    await uploadImage();
+    updateData(
+        nameController.text,
+        hargaController.text,
+        descController.text,
+        light1 == true ? "tersedia" : "habis",
+        categoryValue,
+        imgcheck ? _imgName! : imageName,
+        widget.idprod,
+        context);
+  }
+
   final MaterialStateProperty<Icon?> thumbIcon =
       MaterialStateProperty.resolveWith<Icon?>(
     (Set<MaterialState> states) {
@@ -371,13 +468,33 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const Icon(
-            Icons.image,
-            size: 170,
-          ),
-          const Text(
-            'Edit',
-            style: TextStyle(color: Colors.blue),
+          _imageFile != null
+              ? Image.file(
+                  _imageFile!,
+                  width: 170,
+                  height: 170,
+                  fit: BoxFit.cover,
+                )
+              : imgcheck
+                  ? Icon(
+                      Icons.image,
+                      size: 170,
+                    )
+                  : Image.network(widget.imgplaceholder,
+                      width: 170, height: 170, fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                      // default gambar
+                      return Icon(
+                        Icons.image,
+                        size: 170,
+                      );
+                    }),
+          GestureDetector(
+            onTap: () => _pickImage(),
+            child: const Text(
+              'Edit',
+              style: TextStyle(color: Colors.blue),
+            ),
           ),
           const SizedBox(
             height: 20,
@@ -504,16 +621,7 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
               Expanded(child: SizedBox()),
               GestureDetector(
                 onTap: () => {
-                  // Fluttertoast.showToast(msg: "clicked")
-                  updateData(
-                      nameController.text,
-                      hargaController.text,
-                      descController.text,
-                      light1 == true ? "tersedia" : "habis",
-                      categoryValue,
-                      "null",
-                      widget.idprod,
-                      context)
+                  updateandupload(),
                 },
                 child: const ButtonDetailMenu(
                   color: Colors.green,

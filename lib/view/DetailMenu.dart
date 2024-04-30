@@ -197,6 +197,9 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
       }
     } else {
       Fluttertoast.showToast(msg: "No image selected");
+      setState(() {
+        this._imgName = "null";
+      });
     }
   }
 
@@ -241,12 +244,6 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
       Fluttertoast.showToast(msg: 'failed pick image $e');
     }
 
-    // setState(() {
-
-    //   if (pickedFile != null) {
-    //     _imageFile = File(pickedFile.path);
-    //   }
-    // });
   }
 
   @override
@@ -271,10 +268,6 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
               'Edit',
               style: TextStyle(color: Colors.blue),
             ),
-            // const Icon(
-            //   Icons.edit,
-            //   color: Colors.blue,
-            // ),
           ),
           const SizedBox(
             height: 20,

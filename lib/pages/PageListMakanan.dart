@@ -280,6 +280,7 @@ class _PageMakananState extends State<PageMakanan> {
                           price: price,
                           deskripsi: deskripsi,
                           stock: stock,
+                          imgplaceholder: image,
                         )));
           },
           splashColor: Colors.white,
