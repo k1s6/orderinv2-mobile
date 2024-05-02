@@ -2,13 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:orderez/model/Transaction.dart';
 import 'package:orderez/view/ListMenu.dart';
 
 class ListCardPesanan extends StatelessWidget {
   const ListCardPesanan(
       {super.key, required this.dataList, required this.categories});
 
-  final List dataList;
+  final Transaksi dataList;
   final String categories;
 
   @override
@@ -33,7 +34,7 @@ class ListCardPesanan extends StatelessWidget {
           );
         },
         splashColor: Colors.amberAccent,
-        child: const Padding(
+        child: Padding(
           padding: EdgeInsets.all(7.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -44,9 +45,9 @@ class ListCardPesanan extends StatelessWidget {
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('John Doe', style: TextStyle(fontSize: 20)),
-                      Text('Wednesday, 06 March 2024'),
-                      Text('12:59:00'),
+                      Text(dataList.nama, style: TextStyle(fontSize: 20)),
+                      Text('${dataList.createdAt}'),
+                      Text(dataList.nama),
                     ],
                   )),
                   Icon(
@@ -67,7 +68,7 @@ class SecondPageDialog extends StatelessWidget {
   const SecondPageDialog(
       {super.key, required this.dataList, required this.categories});
 
-  final List dataList;
+  final Transaksi dataList;
   final String categories;
 
   @override
@@ -123,14 +124,14 @@ class SecondPageDialog extends StatelessWidget {
                                 numeric: true,
                               ),
                             ],
-                            rows: dataList.map((e) {
+                            rows: dataList.details.map((e) {
                               return DataRow(cells: [
-                                DataCell(Text(e["nama"] ?? '')),
+                                DataCell(Text(e.product.namaProduct ?? '')),
                                 DataCell(
                                   Align(
                                     alignment: Alignment.centerRight,
                                     child: Text(
-                                      'Rp ${e["harga"].toString()} x ${e["jumlah"].toString()}',
+                                      'Rp ${e.product.hargaProduct} x ${e.jumlah}',
                                       textAlign: TextAlign.end,
                                     ),
                                   ),
@@ -155,7 +156,8 @@ class SecondPageDialog extends StatelessWidget {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Expanded(child: SizedBox()),
-                          Text('Rp 50.000', 
+                          Text(
+                            'Rp 50.000',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )
                         ],
