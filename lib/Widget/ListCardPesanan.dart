@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:orderez/configuration/Constant.dart';
 import 'package:orderez/model/Transaction.dart';
 import 'package:orderez/view/ListMenu.dart';
+
+import 'package:http/http.dart' as http;
 
 class ListCardPesanan extends StatelessWidget {
   const ListCardPesanan(
@@ -70,6 +74,89 @@ class SecondPageDialog extends StatelessWidget {
 
   final Transaksi dataList;
   final String categories;
+
+  Future<void> updateTransaksi(
+      String status, String kode, BuildContext context) async {
+    final String apiUrl = '${OrderinAppConstant.updateTransaction}/${kode}';
+
+    try {
+      // Kirim permintaan HTTP POST ke server
+      final response = await http.put(
+        Uri.parse(apiUrl),
+        body: {
+          "status": status,
+        }, // raw body
+      );
+
+      // Periksa status code respons dari server
+      if (response.statusCode == 200) {
+        // Decode respons JSON
+        final responseData = json.decode(response.body);
+
+        // Periksa status dalam respons
+        if (responseData['status'] == 'success') {
+          // Jika response success eksekusi kode dibawah
+          Fluttertoast.showToast(msg: 'transaksi diterima!');
+        } else {
+          // Jika upload data gagal, dapatkan pesan error
+          String errorMessage = responseData['message'];
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Update Data Gagal'),
+                content: Text(responseData['message']),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Update Data Gagal'),
+              content: Text('error 01'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Update Data Gagal'),
+            content: Text('error 02'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +293,10 @@ class SecondPageDialog extends StatelessWidget {
                                 ),
                                 backgroundColor: Colors.green,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                updateTransaksi(
+                                    "dikonfirmasi", '${dataList.kodeTransaksi}', context);
+                              },
                             )
                           : SizedBox(),
                     ),
