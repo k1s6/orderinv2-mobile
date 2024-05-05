@@ -96,7 +96,9 @@ class SecondPageDialog extends StatelessWidget {
         // Periksa status dalam respons
         if (responseData['status'] == 'success') {
           // Jika response success eksekusi kode dibawah
-          Fluttertoast.showToast(msg: 'transaksi diterima!');
+          status == "diterima"
+              ? Fluttertoast.showToast(msg: 'transaksi diterima!')
+              : Fluttertoast.showToast(msg: 'transaksi ditolak');
         } else {
           // Jika upload data gagal, dapatkan pesan error
           String errorMessage = responseData['message'];
@@ -272,7 +274,10 @@ class SecondPageDialog extends StatelessWidget {
                                     color: Colors.red,
                                   ),
                                   backgroundColor: Colors.red),
-                              onPressed: () {},
+                              onPressed: () {
+                                updateTransaksi("ditolak",
+                                    '${dataList.kodeTransaksi}', context);
+                              },
                             )
                           : SizedBox(),
                     ),
@@ -294,8 +299,8 @@ class SecondPageDialog extends StatelessWidget {
                                 backgroundColor: Colors.green,
                               ),
                               onPressed: () {
-                                updateTransaksi(
-                                    "dikonfirmasi", '${dataList.kodeTransaksi}', context);
+                                updateTransaksi("dikonfirmasi",
+                                    '${dataList.kodeTransaksi}', context);
                               },
                             )
                           : SizedBox(),
