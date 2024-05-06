@@ -1,5 +1,5 @@
 class OrderinAppConstant {
-  static String baseURL = "http://192.168.1.5:8000/api/apimobileorderin";
+  static String baseURL = "http://192.168.1.57:8000/api/apimobileorderin";
   static String productgetURL = '${OrderinAppConstant.baseURL}/dataproduct';
   static String productgetfindURL = '${OrderinAppConstant.baseURL}/findproduct';
   static String uploadURL = '${OrderinAppConstant.baseURL}/uploadproduct';

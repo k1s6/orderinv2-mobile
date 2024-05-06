@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,6 +16,34 @@ class ListCardPesanan extends StatelessWidget {
 
   final Transaksi dataList;
   final String categories;
+
+  convertDate(String getDate) {
+    // Input datetime string
+    String datetimeStr = getDate;
+
+    // Parse the input datetime string
+    DateTime datetimeObj = DateTime.parse(datetimeStr);
+
+    // Format the datetime object as desired
+    String formattedDatetime =
+        DateFormat("EEEE, dd MMMM yyyy").format(datetimeObj);
+
+    return formattedDatetime;
+  }
+
+  convertDate2(String getDate) {
+    String datetimeStr = getDate;
+
+    // Parse the input datetime string
+    DateTime datetimeObj = DateTime.parse(datetimeStr);
+
+    // Format the datetime object as desired
+    String formattedDatetime = DateFormat("HH:mm:ss").format(datetimeObj);
+
+    return formattedDatetime;
+  }
+
+  // print(formattedDatetime);
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +79,8 @@ class ListCardPesanan extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(dataList.nama, style: TextStyle(fontSize: 20)),
-                      Text('${dataList.createdAt}'),
-                      Text(dataList.nama),
+                      Text(convertDate('${dataList.createdAt}')),
+                      Text(convertDate2('${dataList.createdAt}')),
                     ],
                   )),
                   Icon(
@@ -96,7 +125,7 @@ class SecondPageDialog extends StatelessWidget {
         // Periksa status dalam respons
         if (responseData['status'] == 'success') {
           // Jika response success eksekusi kode dibawah
-          status == "diterima"
+          status == "dikonfirmasi"
               ? Fluttertoast.showToast(msg: 'transaksi diterima!')
               : Fluttertoast.showToast(msg: 'transaksi ditolak');
         } else {
@@ -170,7 +199,7 @@ class SecondPageDialog extends StatelessWidget {
             0.7, // 90% of the screen height
         child: Scaffold(
           appBar: AppBar(
-            title: _getTitleProduct('ok'),
+            title: Text("nama : ${dataList.nama}"),
             automaticallyImplyLeading: false, // Remove the back button
             actions: <Widget>[
               IconButton(
@@ -246,7 +275,7 @@ class SecondPageDialog extends StatelessWidget {
                           ),
                           Expanded(child: SizedBox()),
                           Text(
-                            'Rp 50.000',
+                            '${dataList.total}',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )
                         ],
@@ -263,17 +292,27 @@ class SecondPageDialog extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 15),
                       child: this.categories == "pesanan"
                           ? OutlinedButton(
-                              child: Text(
-                                "tolak",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                              child: Container(
+                                width: 62,
+                                child: Center(
+                                  child: Text(
+                                    "tolak",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
                               ),
                               style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                    color: Colors.red,
-                                  ),
-                                  backgroundColor: Colors.red),
+                                side: BorderSide(
+                                  color: Colors.red,
+                                ),
+                                backgroundColor: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      10), // Adjust the value as needed
+                                ),
+                              ),
                               onPressed: () {
                                 updateTransaksi("ditolak",
                                     '${dataList.kodeTransaksi}', context);
@@ -286,17 +325,26 @@ class SecondPageDialog extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 15),
                       child: this.categories == "pesanan"
                           ? OutlinedButton(
-                              child: Text(
-                                "konfirmasi",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                              child: Container(
+                                width: 70,
+                                child: Center(
+                                  child: Text(
+                                    "konfirmasi",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
                               ),
                               style: OutlinedButton.styleFrom(
                                 side: BorderSide(
                                   color: Colors.green,
                                 ),
                                 backgroundColor: Colors.green,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      10), // Adjust the value as needed
+                                ),
                               ),
                               onPressed: () {
                                 updateTransaksi("dikonfirmasi",
