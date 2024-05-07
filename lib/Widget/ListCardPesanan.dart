@@ -97,13 +97,18 @@ class ListCardPesanan extends StatelessWidget {
   }
 }
 
-class SecondPageDialog extends StatelessWidget {
+class SecondPageDialog extends StatefulWidget {
   const SecondPageDialog(
       {super.key, required this.dataList, required this.categories});
 
   final Transaksi dataList;
   final String categories;
 
+  @override
+  State<SecondPageDialog> createState() => _SecondPageDialogState();
+}
+
+class _SecondPageDialogState extends State<SecondPageDialog> {
   Future<void> updateTransaksi(
       String status, String kode, BuildContext context) async {
     final String apiUrl = '${OrderinAppConstant.updateTransaction}/${kode}';
@@ -189,6 +194,10 @@ class SecondPageDialog extends StatelessWidget {
     }
   }
 
+
+  late TextEditingController _controller =
+      TextEditingController(text: widget.dataList.catatan);
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -199,7 +208,7 @@ class SecondPageDialog extends StatelessWidget {
             0.7, // 90% of the screen height
         child: Scaffold(
           appBar: AppBar(
-            title: Text("nama : ${dataList.nama}"),
+            title: Text("nama : ${widget.dataList.nama}"),
             automaticallyImplyLeading: false, // Remove the back button
             actions: <Widget>[
               IconButton(
@@ -242,7 +251,7 @@ class SecondPageDialog extends StatelessWidget {
                                 numeric: true,
                               ),
                             ],
-                            rows: dataList.details.map((e) {
+                            rows: widget.dataList.details.map((e) {
                               return DataRow(cells: [
                                 DataCell(Text(e.product.namaProduct ?? '')),
                                 DataCell(
@@ -275,12 +284,47 @@ class SecondPageDialog extends StatelessWidget {
                           ),
                           Expanded(child: SizedBox()),
                           Text(
-                            '${dataList.total}',
+                            '${widget.dataList.total}',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )
                         ],
                       ),
                     )
+                  ],
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                  child: Text(
+                    'catatan',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: TextField(
+                          readOnly: true,
+                          controller: _controller,
+                          obscureText: false,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
+                            enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 0, 0, 0)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            // prefixIcon: widget.icon,
+                            // suffixIcon: widget.hinttxt == "Password"
+                          )),
+                    ),
                   ],
                 ),
                 Expanded(
@@ -290,7 +334,7 @@ class SecondPageDialog extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 15),
-                      child: this.categories == "pesanan"
+                      child: this.widget.categories == "pesanan"
                           ? OutlinedButton(
                               child: Container(
                                 width: 62,
@@ -314,8 +358,10 @@ class SecondPageDialog extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                updateTransaksi("ditolak",
-                                    '${dataList.kodeTransaksi}', context);
+                                updateTransaksi(
+                                    "ditolak",
+                                    '${widget.dataList.kodeTransaksi}',
+                                    context);
                               },
                             )
                           : SizedBox(),
@@ -323,7 +369,7 @@ class SecondPageDialog extends StatelessWidget {
                     Expanded(child: SizedBox()),
                     Padding(
                       padding: const EdgeInsets.only(right: 15),
-                      child: this.categories == "pesanan"
+                      child: this.widget.categories == "pesanan"
                           ? OutlinedButton(
                               child: Container(
                                 width: 70,
@@ -347,8 +393,10 @@ class SecondPageDialog extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                updateTransaksi("dikonfirmasi",
-                                    '${dataList.kodeTransaksi}', context);
+                                updateTransaksi(
+                                    "dikonfirmasi",
+                                    '${widget.dataList.kodeTransaksi}',
+                                    context);
                               },
                             )
                           : SizedBox(),
@@ -362,28 +410,5 @@ class SecondPageDialog extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-// final List dataList = [
-//   {'nama': 'expresso', 'jumlah': 2, 'harga': 10000},
-//   {'nama': 'americano', 'jumlah': 1, 'harga': 30000},
-//   {'nama': 'steak', 'jumlah': 3, 'harga': 50000},
-// ];
-
-// class SecondPageContent extends StatelessWidget {
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return
-//   }
-// }
-
-Text _getTitleProduct(String txt) {
-  switch (txt) {
-    case "ok":
-      return Text('Nama : John Doe');
-    default:
-      return Text('nothing');
   }
 }

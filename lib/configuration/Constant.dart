@@ -6,6 +6,8 @@ class OrderinAppConstant {
   static String updateURL = '${OrderinAppConstant.baseURL}/product';
   static String delprodURL = '${OrderinAppConstant.baseURL}/delproduct';
   static String upimgURL = '${OrderinAppConstant.baseURL}/upload-img';
-  static String getdataTransaction = '${OrderinAppConstant.baseURL}/transaction';
-  static String updateTransaction = '${OrderinAppConstant.baseURL}/transactionupdate';
+  static String getdataTransaction =
+      '${OrderinAppConstant.baseURL}/transaction';
+  static String updateTransaction =
+      '${OrderinAppConstant.baseURL}/transactionupdate';
 }
