@@ -35,7 +35,7 @@ class _Login2State extends State<Login2> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.to(ListMenu());
+                            Get.to(ListMenu(initialTabIndex: 1,));
                           },
                           child: Text(
                             "Pramudya",
@@ -83,7 +83,7 @@ class _Login2State extends State<Login2> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ListMenu()));
+                                builder: (context) => ListMenu(initialTabIndex: 1,)));
                       },
                     ),
                     const SizedBox(

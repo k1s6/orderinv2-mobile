@@ -194,7 +194,6 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
     }
   }
 
-
   late TextEditingController _controller =
       TextEditingController(text: widget.dataList.catatan);
 
@@ -397,6 +396,7 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
                                     "dikonfirmasi",
                                     '${widget.dataList.kodeTransaksi}',
                                     context);
+                                Navigator.pop(context);
                               },
                             )
                           : SizedBox(),

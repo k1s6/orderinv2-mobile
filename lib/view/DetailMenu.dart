@@ -98,7 +98,10 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
           Timer(Duration(seconds: 2), () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => ListMenu()),
+              MaterialPageRoute(
+                  builder: (context) => ListMenu(
+                        initialTabIndex: 1,
+                      )),
             );
           });
         } else {
@@ -243,7 +246,6 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
     } on PlatformException catch (e) {
       Fluttertoast.showToast(msg: 'failed pick image $e');
     }
-
   }
 
   @override

@@ -146,6 +146,25 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
         }, // raw body
       );
 
+      int initIndex;
+
+      switch (jenis) {
+        case "makanan":
+          initIndex = 0;
+          break;
+        case "minuman":
+          initIndex = 1;
+          break;
+        case "snack":
+          initIndex = 2;
+          break;
+        case "steak":
+          initIndex = 3;
+          break;
+        default:
+          initIndex = 0;
+      }
+
       // Periksa status code respons dari server
       if (response.statusCode == 200) {
         // Decode respons JSON
@@ -157,12 +176,15 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
 
           Fluttertoast.showToast(msg: 'data berhasil diubah');
 
-          // Timer(Duration(seconds: 2), () {
-          //   Navigator.pushReplacement(
-          //     context,
-          //     MaterialPageRoute(builder: (context) => ListMenu()),
-          //   );
-          // });
+          Timer(Duration(seconds: 2), () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ListMenu(
+                        initialTabIndex: initIndex,
+                      )),
+            );
+          });
         } else {
           // Jika upload data gagal, dapatkan pesan error
           String errorMessage = responseData['message'];
@@ -246,9 +268,9 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
               child: Text('Batal'),
             ),
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                deleteData(idprod, context);
+              onPressed: () async {
+                // Navigator.of(context).pop();
+                await deleteData(idprod, context);
               },
               child: Text('Hapus'),
             ),
@@ -281,7 +303,10 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
           Timer(Duration(seconds: 2), () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => ListMenu()),
+              MaterialPageRoute(
+                  builder: (context) => ListMenu(
+                        initialTabIndex: 1,
+                      )),
             );
           });
         } else {
@@ -385,7 +410,7 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
         // Check status in the response
         if (responseData['status'] == 'success') {
           // If response success, execute code below
-          Fluttertoast.showToast(msg: 'Data berhasil diupload');
+          Fluttertoast.showToast(msg: 'Gambar berhasil terunggah');
           setState(() {
             this._imgName = responseData['name'];
           });
@@ -399,7 +424,7 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
       }
     } else {
       String imageName = getImageNameFromUrl(widget.imgplaceholder);
-      Fluttertoast.showToast(msg: "No image selected");
+      Fluttertoast.showToast(msg: "Gambar tidak diubah");
       setState(() {
         this._imgName = imageName;
       });

@@ -8,14 +8,28 @@ import 'package:orderez/view/DetailMenu.dart';
 import 'package:orderez/pages/PageListMakanan.dart';
 
 class ListMenu extends StatefulWidget {
-  const ListMenu({super.key});
+  final int initialTabIndex;
+
+  const ListMenu({super.key, required this.initialTabIndex});
 
   @override
   State<ListMenu> createState() => _ListMenuState();
 }
 
-class _ListMenuState extends State<ListMenu> {
-  TabBar get _tabBar => const TabBar(
+class _ListMenuState extends State<ListMenu>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.index = widget.initialTabIndex;
+  }
+
+  TabBar get _tabBar => TabBar(
+        controller: _tabController,
         tabs: [
           Tab(text: 'Makanan'),
           Tab(text: 'Minuman'),
@@ -60,7 +74,7 @@ class _ListMenuState extends State<ListMenu> {
               ),
             ),
             drawer: DrawerComponent(nums: 2),
-            body: const TabBarView(children: [
+            body: TabBarView(controller: _tabController, children: [
               PageMakanan(),
               PageMinuman(),
               PageSnack(),

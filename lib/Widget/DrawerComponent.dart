@@ -46,7 +46,7 @@ class DrawerComponent extends StatelessWidget {
                         size: 90,
                       ),
                       Text(
-                        'Gua Admin',
+                        'Admin',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -77,7 +77,9 @@ class DrawerComponent extends StatelessWidget {
                     selected: listbool[1],
                     name: 'List Menu',
                     icons: Icon(Icons.menu_book_rounded),
-                    destination: ListMenu(),
+                    destination: ListMenu(
+                      initialTabIndex: 0,
+                    ),
                   ),
                 ],
               ),

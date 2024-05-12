@@ -115,7 +115,7 @@ class ButtonSection extends StatelessWidget {
           icon: Icons.near_me,
           label: 'ROUTE',
           onTap: () async {
-            Get.to(ListMenu());
+            Get.to(ListMenu(initialTabIndex: 1,));
           },
         ),
         ButtonWithText(
