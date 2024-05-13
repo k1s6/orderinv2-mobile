@@ -149,16 +149,16 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
       int initIndex;
 
       switch (jenis) {
-        case "makanan":
+        case "Makanan":
           initIndex = 0;
           break;
-        case "minuman":
+        case "Minuman":
           initIndex = 1;
           break;
-        case "snack":
+        case "Snack":
           initIndex = 2;
           break;
-        case "steak":
+        case "Steak":
           initIndex = 3;
           break;
         default:

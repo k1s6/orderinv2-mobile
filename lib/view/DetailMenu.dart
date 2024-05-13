@@ -84,6 +84,25 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
         }, // raw body
       );
 
+      int initIndex;
+
+      switch (jenis) {
+        case "Makanan":
+          initIndex = 0;
+          break;
+        case "Minuman":
+          initIndex = 1;
+          break;
+        case "Snack":
+          initIndex = 2;
+          break;
+        case "Steak":
+          initIndex = 3;
+          break;
+        default:
+          initIndex = 0;
+      }
+
       // Periksa status code respons dari server
       if (response.statusCode == 200) {
         // Decode respons JSON
@@ -100,7 +119,7 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
               context,
               MaterialPageRoute(
                   builder: (context) => ListMenu(
-                        initialTabIndex: 1,
+                        initialTabIndex: initIndex,
                       )),
             );
           });

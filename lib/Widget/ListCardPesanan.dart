@@ -252,12 +252,12 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
                             ],
                             rows: widget.dataList.details.map((e) {
                               return DataRow(cells: [
-                                DataCell(Text(e.product.namaProduct ?? '')),
+                                DataCell(Text(e.namaProduct ?? '')),
                                 DataCell(
                                   Align(
                                     alignment: Alignment.centerRight,
                                     child: Text(
-                                      'Rp ${e.product.hargaProduct} x ${e.jumlah}',
+                                      'Rp ${e.harga} x ${e.jumlah}',
                                       textAlign: TextAlign.end,
                                     ),
                                   ),

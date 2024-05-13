@@ -80,6 +80,15 @@ class _PageKonfirmasiState extends State<PageKonfirmasi> {
     }
   }
 
+  Future<void> _refreshData(BuildContext context) async {
+    setState(() {
+      // Reset listProd and isDataNotEmpty before fetching new data
+      listProd.clear();
+      isDataNotEmpty = true;
+    });
+    await showData(context);
+  }
+
   Future<List<Transaksi>> transaksi(BuildContext context) async {
     await showData(context);
     return listProd;
@@ -100,37 +109,63 @@ class _PageKonfirmasiState extends State<PageKonfirmasi> {
 
             // jika error
             if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  "Error : ${snapshot.error}",
-                  style: const TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w600,
-                  ),
+              return RefreshIndicator(
+                onRefresh: () => _refreshData(context),
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    Center(
+                      child: Text(
+                        "Error : ${snapshot.error}",
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               );
             }
 
             // jika data didapatkan
             if (snapshot.hasData && listProd.isNotEmpty) {
-              return ListView.builder(
-                itemCount: listProd.length,
-                itemBuilder: (s, index) {
-                  return ListCardPesanan(
-                    dataList: listProd[index],
-                    categories: 'konfirmasi',
-                  );
-                },
+              return RefreshIndicator(
+                onRefresh: () => _refreshData(context),
+                child: ListView.builder(
+                  itemCount: listProd.length,
+                  itemBuilder: (s, index) {
+                    return ListCardPesanan(
+                      dataList: listProd[index],
+                      categories: 'konfirmasi',
+                    );
+                  },
+                ),
               );
             } else {
               // jika data tidak ditemukan
-              return Center(
-                child: Text(
-                  isDataNotEmpty ? 'Something Wrong' : 'Tidak Ada Data',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
+              return RefreshIndicator(
+                onRefresh: () => _refreshData(context),
+                child: ListView(
+                  children: [
+                    Container(
+                      height: 270,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              isDataNotEmpty
+                                  ? 'Something Wrong'
+                                  : 'Tidak Ada Data',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ]),
+                    ),
+                  ],
                 ),
               );
             }

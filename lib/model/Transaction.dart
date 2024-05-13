@@ -57,36 +57,40 @@ class Transaksi {
 
 class Detail {
   int kodeTransaksi;
-  int kodeProduct;
+  // int kodeProduct;
+  String namaProduct;
   int jumlah;
   int harga;
   int total;
-  Product product;
+  // Product product;
 
   Detail({
     required this.kodeTransaksi,
-    required this.kodeProduct,
+    // required this.kodeProduct,
+    required this.namaProduct,
     required this.jumlah,
     required this.harga,
     required this.total,
-    required this.product,
+    // required this.product,
   });
 
   factory Detail.fromJson(Map<String, dynamic> json) => Detail(
         kodeTransaksi: json["kode_transaksi"],
-        kodeProduct: json["kode_product"],
+        // kodeProduct: json["kode_product"],
+        namaProduct: json["nama_product"],
         jumlah: json["jumlah"],
         harga: json["harga"],
         total: json["total"],
-        product: Product.fromJson(json["product"]),
+        // product: Product.fromJson(json["product"]),
       );
 
   Map<String, dynamic> toJson() => {
         "kode_transaksi": kodeTransaksi,
-        "kode_product": kodeProduct,
+        // "kode_product": kodeProduct,
+        "nama_product" : namaProduct,
         "jumlah": jumlah,
         "harga": harga,
         "total": total,
-        "product": product.toJson(),
+        // "product": product.toJson(),
       };
 }

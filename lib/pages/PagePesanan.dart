@@ -116,6 +116,7 @@ class _PagePesananState extends State<PagePesanan> {
               return RefreshIndicator(
                 onRefresh: () => _refreshData(context),
                 child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
                   children: [
                     Center(
                       child: Text(
@@ -147,13 +148,28 @@ class _PagePesananState extends State<PagePesanan> {
               );
             } else {
               // jika data tidak ditemukan
-              return Center(
-                child: Text(
-                  isDataNotEmpty ? 'Something Wrong' : 'Tidak Ada Data',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
+              return RefreshIndicator(
+                onRefresh: () => _refreshData(context),
+                child: ListView(
+                  children: [
+                    Container(
+                      height: 270,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              isDataNotEmpty
+                                  ? 'Something Wrong'
+                                  : 'Tidak Ada Data',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ]),
+                    ),
+                  ],
                 ),
               );
             }
