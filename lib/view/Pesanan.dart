@@ -36,15 +36,14 @@ class _PesananState extends State<Pesanan> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             iconTheme: const IconThemeData(color: Colors.white),
             backgroundColor: const Color.fromARGB(255, 47, 47, 47),
-            title: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 84),
-                child: Text(
-                  'Pesanan',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                )),
+            title: const Text(
+              'Pesanan',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
             bottom: PreferredSize(
               preferredSize: _tabBar.preferredSize,
               child: Material(

@@ -53,13 +53,11 @@ class _EditMenuState extends State<EditMenu> {
         ),
         // iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: const Color.fromARGB(255, 47, 47, 47),
-        title: const Padding(
-            padding: EdgeInsets.only(left: 50),
-            child: Text(
-              'Detail Menu',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            )),
+        centerTitle: true,
+        title: const Text(
+          'Detail Menu',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
       ),
       body: BodyOfEditMenu(
         idprod: widget.idprod,

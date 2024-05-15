@@ -50,14 +50,13 @@ class _ListMenuState extends State<ListMenu>
           length: 4,
           child: Scaffold(
             appBar: AppBar(
+              centerTitle: true,
               iconTheme: const IconThemeData(color: Colors.white),
               backgroundColor: const Color.fromARGB(255, 47, 47, 47),
-              title: const Center(
-                child: Text(
-                  'Daftar Menu',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
+              title: const Text(
+                'Daftar Menu',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(60),

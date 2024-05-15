@@ -26,10 +26,13 @@ class _PageMakananState extends State<PageMakanan> {
 
   late String valuekey = "";
 
+  late TextEditingController SearchController;
+
   @override
   void initState() {
     super.initState();
     findclicked;
+    SearchController = TextEditingController(text: valuekey);
   }
 
   void updateclick(bool value) {
@@ -162,7 +165,7 @@ class _PageMakananState extends State<PageMakanan> {
 
   @override
   Widget build(BuildContext context) {
-    final SearchController = TextEditingController();
+    // final SearchController = TextEditingController();
 
     return Scaffold(
       body: Column(
@@ -194,7 +197,6 @@ class _PageMakananState extends State<PageMakanan> {
               },
             ),
           ),
-
           Expanded(
             child: FutureBuilder<List<Product>?>(
               future: findclicked == true
