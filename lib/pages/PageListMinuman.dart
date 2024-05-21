@@ -13,7 +13,7 @@ class PageMinuman extends StatefulWidget {
 
   @override
   State<PageMinuman> createState() => _PageMinumanState();
-  
+
   void updateFindClicked(bool value) {
     updateFindClicked(value);
   }
@@ -26,10 +26,13 @@ class _PageMinumanState extends State<PageMinuman> {
 
   late String valuekey = "";
 
+  late TextEditingController SearchController;
+
   @override
   void initState() {
     super.initState();
     findclicked;
+    SearchController = TextEditingController(text: valuekey);
   }
 
   void updateclick(bool value) {
@@ -37,19 +40,6 @@ class _PageMinumanState extends State<PageMinuman> {
       findclicked = true;
     });
   }
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback(
-  //     (timeStamp) async {
-  //       try {
-  //         await getDataProduct(context);
-  //       } catch (ex) {
-  //         Fluttertoast.showToast(msg: "ERROR : ${ex.toString()}");
-  //       }
-  //     },
-  //   );
-  // }
 
   bool isDataNotEmpty = true;
 
@@ -97,7 +87,7 @@ class _PageMinumanState extends State<PageMinuman> {
 
   bool isDataNotEmpty1 = true;
 
-    Future<void> getDataProductFind(
+  Future<void> getDataProductFind(
       BuildContext context, String jenis, String keyword) async {
     final String apiUrl =
         '${OrderinAppConstant.productgetfindURL}/$jenis?keyword=$keyword';
@@ -161,8 +151,6 @@ class _PageMinumanState extends State<PageMinuman> {
 
   @override
   Widget build(BuildContext context) {
-    final SearchController = TextEditingController();
-
     return Scaffold(
       body: Column(
         children: [
@@ -193,7 +181,6 @@ class _PageMinumanState extends State<PageMinuman> {
               },
             ),
           ),
-
           Expanded(
             child: FutureBuilder<List<Product>?>(
               future: findclicked == true
@@ -293,8 +280,7 @@ class _PageMinumanState extends State<PageMinuman> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Center(
-                      child:
-                          Image.network('${image}', fit: BoxFit.cover,
+                      child: Image.network('${image}', fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                         // default gambar
                         return Image.asset(

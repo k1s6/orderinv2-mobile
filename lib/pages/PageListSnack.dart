@@ -13,7 +13,7 @@ class PageSnack extends StatefulWidget {
 
   @override
   State<PageSnack> createState() => _PageSnackState();
-  
+
   void updateFindClicked(bool value) {
     updateFindClicked(value);
   }
@@ -26,10 +26,13 @@ class _PageSnackState extends State<PageSnack> {
 
   late String valuekey = "";
 
+  late TextEditingController SearchController;
+
   @override
   void initState() {
     super.initState();
     findclicked;
+    SearchController = TextEditingController(text: valuekey);
   }
 
   void updateclick(bool value) {
@@ -97,7 +100,7 @@ class _PageSnackState extends State<PageSnack> {
 
   bool isDataNotEmpty1 = true;
 
-    Future<void> getDataProductFind(
+  Future<void> getDataProductFind(
       BuildContext context, String jenis, String keyword) async {
     final String apiUrl =
         '${OrderinAppConstant.productgetfindURL}/$jenis?keyword=$keyword';
@@ -161,8 +164,6 @@ class _PageSnackState extends State<PageSnack> {
 
   @override
   Widget build(BuildContext context) {
-    final SearchController = TextEditingController();
-
     return Scaffold(
       body: Column(
         children: [
@@ -193,7 +194,6 @@ class _PageSnackState extends State<PageSnack> {
               },
             ),
           ),
-
           Expanded(
             child: FutureBuilder<List<Product>?>(
               future: findclicked == true
@@ -293,8 +293,7 @@ class _PageSnackState extends State<PageSnack> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Center(
-                      child:
-                          Image.network('${image}', fit: BoxFit.cover,
+                      child: Image.network('${image}', fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                         // default gambar
                         return Image.asset(

@@ -13,7 +13,7 @@ class PageSteak extends StatefulWidget {
 
   @override
   State<PageSteak> createState() => _PageSteakState();
-  
+
   void updateFindClicked(bool value) {
     updateFindClicked(value);
   }
@@ -26,10 +26,13 @@ class _PageSteakState extends State<PageSteak> {
 
   late String valuekey = "";
 
+  late TextEditingController SearchController;
+
   @override
   void initState() {
     super.initState();
     findclicked;
+    SearchController = TextEditingController(text: valuekey);
   }
 
   void updateclick(bool value) {
@@ -37,19 +40,6 @@ class _PageSteakState extends State<PageSteak> {
       findclicked = true;
     });
   }
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback(
-  //     (timeStamp) async {
-  //       try {
-  //         await getDataProduct(context);
-  //       } catch (ex) {
-  //         Fluttertoast.showToast(msg: "ERROR : ${ex.toString()}");
-  //       }
-  //     },
-  //   );
-  // }
 
   bool isDataNotEmpty = true;
 
@@ -97,7 +87,7 @@ class _PageSteakState extends State<PageSteak> {
 
   bool isDataNotEmpty1 = true;
 
-    Future<void> getDataProductFind(
+  Future<void> getDataProductFind(
       BuildContext context, String jenis, String keyword) async {
     final String apiUrl =
         '${OrderinAppConstant.productgetfindURL}/$jenis?keyword=$keyword';
@@ -161,8 +151,6 @@ class _PageSteakState extends State<PageSteak> {
 
   @override
   Widget build(BuildContext context) {
-    final SearchController = TextEditingController();
-
     return Scaffold(
       body: Column(
         children: [
@@ -193,7 +181,6 @@ class _PageSteakState extends State<PageSteak> {
               },
             ),
           ),
-
           Expanded(
             child: FutureBuilder<List<Product>?>(
               future: findclicked == true
@@ -293,8 +280,7 @@ class _PageSteakState extends State<PageSteak> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Center(
-                      child:
-                          Image.network('${image}', fit: BoxFit.cover,
+                      child: Image.network('${image}', fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                         // default gambar
                         return Image.asset(
