@@ -8,7 +8,8 @@ class Product {
   num kodeProduct;
   String namaProduct;
   String gambarProduct;
-  num hargaProduct;
+  String hargaProduct;
+  // num hargaProduct;
   String stockProduct;
   String jenisProduct;
   String descProduct;
@@ -31,7 +32,8 @@ class Product {
         kodeProduct: json["kode_product"],
         namaProduct: json["nama_product"],
         gambarProduct: json["gambar_product"],
-        hargaProduct: json["harga_product"]?.toDouble(),
+        hargaProduct: json["harga_product"],
+        // hargaProduct: json["harga_product"]?.toDouble(),
         stockProduct: json["stock_product"],
         jenisProduct: json["jenis_product"],
         descProduct: json["deskripsi"],

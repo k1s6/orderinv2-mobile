@@ -204,7 +204,7 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
         width:
             MediaQuery.of(context).size.width * 0.9, // 90% of the screen width
         height: MediaQuery.of(context).size.height *
-            0.7, // 90% of the screen height
+            0.9, // 90% of the screen height
         child: Scaffold(
           appBar: AppBar(
             title: Text("nama : ${widget.dataList.nama}"),
@@ -278,6 +278,22 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
                       child: Row(
                         children: [
                           Text(
+                            'quantity',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Expanded(child: SizedBox()),
+                          Text(
+                            '${widget.dataList.jumlah}',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 30, right: 30),
+                      child: Row(
+                        children: [
+                          Text(
                             'total harga',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
@@ -303,26 +319,29 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: TextField(
-                          readOnly: true,
-                          controller: _controller,
-                          obscureText: false,
-                          maxLines: null,
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color.fromARGB(255, 0, 0, 0)),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            // prefixIcon: widget.icon,
-                            // suffixIcon: widget.hinttxt == "Password"
-                          )),
+                      child: Scrollbar(
+                        
+                        child: TextField(
+                            readOnly: true,
+                            controller: _controller,
+                            obscureText: false,
+                            maxLines: 3,
+                            decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color.fromARGB(255, 0, 0, 0)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              // prefixIcon: widget.icon,
+                              // suffixIcon: widget.hinttxt == "Password"
+                            )),
+                      ),
                     ),
                   ],
                 ),
@@ -403,7 +422,7 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
                     ),
                   ],
                 ),
-                Padding(padding: EdgeInsets.only(bottom: 60), child: SizedBox())
+                Padding(padding: EdgeInsets.only(bottom: 30), child: SizedBox())
               ],
             ),
           ),

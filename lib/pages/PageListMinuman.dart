@@ -57,6 +57,7 @@ class _PageMinumanState extends State<PageMinuman> {
           List<dynamic> data = responseData['data'];
 
           listProd = data.map((item) => Product.fromJson(item)).toList();
+          
         } else if (responseData['status'] == 'fail') {
           print(responseData['message']);
           isDataNotEmpty = false;

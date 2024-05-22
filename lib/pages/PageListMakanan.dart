@@ -61,16 +61,24 @@ class _PageMakananState extends State<PageMakanan> {
     final String apiUrl = '${OrderinAppConstant.productgetURL}/makanan';
 
     try {
+      Fluttertoast.showToast(msg: 'trying to get data');
       final response = await http.get(Uri.parse(apiUrl));
 
       if (response.statusCode == 200) {
+        Fluttertoast.showToast(msg: 'statuscode 200');
         final responseData = jsonDecode(response.body);
 
         if (responseData['status'] == 'success') {
+          Fluttertoast.showToast(msg: 'status success');
           // tampilkan data
           List<dynamic> data = responseData['data'];
+          Fluttertoast.showToast(msg: 'status success 00');
 
           listProd = data.map((item) => Product.fromJson(item)).toList();
+
+          // Fluttertoast.showToast(msg: listProd.);
+
+          Fluttertoast.showToast(msg: 'status success 01');
         } else if (responseData['status'] == 'fail') {
           print(responseData['message']);
           isDataNotEmpty = false;
@@ -231,7 +239,8 @@ class _PageMakananState extends State<PageMakanan> {
                         return _buildCard(
                           drink.kodeProduct.toString(),
                           drink.namaProduct ?? '',
-                          drink.hargaProduct.toString(),
+                          drink.hargaProduct ?? '',
+                          // drink.hargaProduct.toString(),
                           drink.gambarProduct ?? '',
                           drink.stockProduct ?? '',
                           drink.descProduct ?? '',

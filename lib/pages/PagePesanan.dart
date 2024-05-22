@@ -50,7 +50,7 @@ class _PagePesananState extends State<PagePesanan> {
           }
 
           for (var trx in listProd) {
-            DMethod.log('DATA -> ${trx.kodeTransaksi}');
+            DMethod.log('DATA -> ${trx.nama}');
           }
 
           // log(listProd);
@@ -102,79 +102,86 @@ class _PagePesananState extends State<PagePesanan> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 14.0),
-      child: Expanded(
-        child: FutureBuilder<List<Transaksi>?>(
-          future: transaksi(context),
-          builder: (context, snapshot) {
-            // dalam loading
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CupertinoActivityIndicator());
-            }
+      child: Column(
+        children: [
+          Center(
+            child: Text("Searchbar Here..."),
+          ),
+          Expanded(
+            child: FutureBuilder<List<Transaksi>?>(
+              future: transaksi(context),
+              builder: (context, snapshot) {
+                // dalam loading
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CupertinoActivityIndicator());
+                }
 
-            // jika error
-            if (snapshot.hasError) {
-              return RefreshIndicator(
-                onRefresh: () => _refreshData(context),
-                child: ListView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  children: [
-                    Center(
-                      child: Text(
-                        "Error : ${snapshot.error}",
-                        style: const TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            // jika data didapatkan
-            if (snapshot.hasData && listProd.isNotEmpty) {
-              return RefreshIndicator(
-                onRefresh: () => _refreshData(context),
-                child: ListView.builder(
-                  itemCount: listProd.length,
-                  itemBuilder: (s, index) {
-                    return ListCardPesanan(
-                      dataList: listProd[index],
-                      categories: 'pesanan',
-                    );
-                  },
-                ),
-              );
-            } else {
-              // jika data tidak ditemukan
-              return RefreshIndicator(
-                onRefresh: () => _refreshData(context),
-                child: ListView(
-                  children: [
-                    Container(
-                      height: 270,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              isDataNotEmpty
-                                  ? 'Something Wrong'
-                                  : 'Tidak Ada Data',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
+                // jika error
+                if (snapshot.hasError) {
+                  return RefreshIndicator(
+                    onRefresh: () => _refreshData(context),
+                    child: ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      children: [
+                        Center(
+                          child: Text(
+                            "Error : ${snapshot.error}",
+                            style: const TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w600,
                             ),
-                          ]),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            }
-          },
-        ),
+                  );
+                }
+
+                // jika data didapatkan
+                if (snapshot.hasData && listProd.isNotEmpty) {
+                  return RefreshIndicator(
+                    onRefresh: () => _refreshData(context),
+                    child: ListView.builder(
+                      itemCount: listProd.length,
+                      itemBuilder: (s, index) {
+                        return ListCardPesanan(
+                          dataList: listProd[index],
+                          categories: 'pesanan',
+                        );
+                      },
+                    ),
+                  );
+                } else {
+                  // jika data tidak ditemukan
+                  return RefreshIndicator(
+                    onRefresh: () => _refreshData(context),
+                    child: ListView(
+                      children: [
+                        Container(
+                          height: 270,
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  isDataNotEmpty
+                                      ? 'Something Wrong'
+                                      : 'Tidak Ada Data',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ]),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
