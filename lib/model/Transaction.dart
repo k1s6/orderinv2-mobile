@@ -10,8 +10,10 @@ class Transaksi {
   int kodeTransaksi;
   String nama;
   String status;
-  int jumlah;
-  int total;
+  String jumlah;
+  // int jumlah;
+  String total;
+  // int total;
   String? catatan;
   DateTime createdAt;
   DateTime updatedAt;
@@ -56,13 +58,15 @@ class Transaksi {
 }
 
 class Detail {
-  int kodeTransaksi;
-  // int kodeProduct;
+  String kodeTransaksi;
+  // int kodeTransaksi;
   String namaProduct;
-  int jumlah;
-  int harga;
-  int total;
-  // Product product;
+  String jumlah;
+  // int jumlah;
+  String harga;
+  // int harga;
+  String total;
+  // int total;
 
   Detail({
     required this.kodeTransaksi,
@@ -87,7 +91,7 @@ class Detail {
   Map<String, dynamic> toJson() => {
         "kode_transaksi": kodeTransaksi,
         // "kode_product": kodeProduct,
-        "nama_product" : namaProduct,
+        "nama_product": namaProduct,
         "jumlah": jumlah,
         "harga": harga,
         "total": total,

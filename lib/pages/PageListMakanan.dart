@@ -239,8 +239,8 @@ class _PageMakananState extends State<PageMakanan> {
                         return _buildCard(
                           drink.kodeProduct.toString(),
                           drink.namaProduct ?? '',
-                          drink.hargaProduct ?? '',
-                          // drink.hargaProduct.toString(),
+                          // drink.hargaProduct ?? '',
+                          drink.hargaProduct.toString(),
                           drink.gambarProduct ?? '',
                           drink.stockProduct ?? '',
                           drink.descProduct ?? '',

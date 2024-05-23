@@ -231,39 +231,42 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
                       ),
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 10),
-                        child: SingleChildScrollView(
-                          child: DataTable(
-                            border: TableBorder(
-                              horizontalInside:
-                                  BorderSide(width: 1, color: Colors.grey),
-                            ),
-                            columns: const [
-                              DataColumn(label: Text('nama')),
-                              DataColumn(
-                                label: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'jumlah',
-                                    textAlign: TextAlign.end,
-                                  ),
-                                ),
-                                numeric: true,
+                        child: Scrollbar(
+                          thumbVisibility: true,
+                          child: SingleChildScrollView(
+                            child: DataTable(
+                              border: TableBorder(
+                                horizontalInside:
+                                    BorderSide(width: 1, color: Colors.grey),
                               ),
-                            ],
-                            rows: widget.dataList.details.map((e) {
-                              return DataRow(cells: [
-                                DataCell(Text(e.namaProduct ?? '')),
-                                DataCell(
-                                  Align(
-                                    alignment: Alignment.centerRight,
+                              columns: const [
+                                DataColumn(label: Text('nama')),
+                                DataColumn(
+                                  label: Align(
+                                    alignment: Alignment.center,
                                     child: Text(
-                                      'Rp ${e.harga} x ${e.jumlah}',
+                                      'jumlah',
                                       textAlign: TextAlign.end,
                                     ),
                                   ),
+                                  numeric: true,
                                 ),
-                              ]);
-                            }).toList(),
+                              ],
+                              rows: widget.dataList.details.map((e) {
+                                return DataRow(cells: [
+                                  DataCell(Text(e.namaProduct ?? '')),
+                                  DataCell(
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        'Rp ${e.harga} x ${e.jumlah}',
+                                        textAlign: TextAlign.end,
+                                      ),
+                                    ),
+                                  ),
+                                ]);
+                              }).toList(),
+                            ),
                           ),
                         ),
                       ),
@@ -320,7 +323,8 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Scrollbar(
-                        
+                        thumbVisibility: true,
+                        // trackVisibility: true,
                         child: TextField(
                             readOnly: true,
                             controller: _controller,
