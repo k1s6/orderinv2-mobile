@@ -22,8 +22,17 @@ class PagePesanan extends StatefulWidget {
 
 class _PagePesananState extends State<PagePesanan> {
   late List<Transaksi> listProd = [];
+  late List<Transaksi> filteredListProd = [];
+  late Future<void> _dataFuture;
 
   bool isDataNotEmpty = true;
+  TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _dataFuture = showData(context);
+  }
 
   Future<void> showData(BuildContext context) async {
     final String apiUrl = '${OrderinAppConstant.getdataTransaction}/diterima';
@@ -43,11 +52,17 @@ class _PagePesananState extends State<PagePesanan> {
           // tampilkan data
           List<dynamic> data = responseData['data'];
 
-          listProd = data.map((item) => Transaksi.fromJson(item)).toList();
+          // listProd = data.map((item) => Transaksi.fromJson(item)).toList();
+          // filteredListProd = listProd;
 
-          if (listProd.length == 0) {
-            isDataNotEmpty = false;
-          }
+          // if (listProd.length == 0) {
+          //   isDataNotEmpty = false;
+          // }
+          setState(() {
+            listProd = data.map((item) => Transaksi.fromJson(item)).toList();
+            filteredListProd = listProd;
+            isDataNotEmpty = listProd.isNotEmpty;
+          });
 
           for (var trx in listProd) {
             DMethod.log('DATA -> ${trx.nama}');
@@ -84,19 +99,32 @@ class _PagePesananState extends State<PagePesanan> {
     }
   }
 
+  void filterSearchResults(String query) {
+    // if (query.isNotEmpty) {
+    List<Transaksi> filteredUsers = listProd.where((user) {
+      return user.nama.toLowerCase().contains(query.toLowerCase());
+    }).toList();
+    setState(() {
+      filteredListProd = filteredUsers;
+      isDataNotEmpty = false;
+    });
+  }
+
   Future<void> _refreshData(BuildContext context) async {
     setState(() {
       // Reset listProd and isDataNotEmpty before fetching new data
       listProd.clear();
+      filteredListProd.clear();
       isDataNotEmpty = true;
+      _dataFuture = showData(context);
     });
-    await showData(context);
+    // await showData(context);
   }
 
-  Future<List<Transaksi>> transaksi(BuildContext context) async {
-    await showData(context);
-    return listProd;
-  }
+  // Future<List<Transaksi>> transaksi(BuildContext context) async {
+  //   await showData(context);
+  //   return listProd;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -104,12 +132,33 @@ class _PagePesananState extends State<PagePesanan> {
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 14.0),
       child: Column(
         children: [
-          Center(
-            child: Text("Searchbar Here..."),
+          Padding(
+            padding: EdgeInsets.all(12),
+            child: TextField(
+              controller: searchController,
+              textAlignVertical: TextAlignVertical.center,
+              // textAlign: TextAlign.center,
+              decoration: const InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                prefixIcon: Icon(Icons.search),
+                hintText: "Cari Nama Pelanggan",
+                fillColor: Color.fromARGB(255, 245, 245, 245),
+                filled: true,
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black)),
+              ),
+              onChanged: (value) {
+                filterSearchResults(value);
+              },
+            ),
           ),
           Expanded(
             child: FutureBuilder<List<Transaksi>?>(
-              future: transaksi(context),
+              future: Future.value(listProd),
               builder: (context, snapshot) {
                 // dalam loading
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -138,14 +187,14 @@ class _PagePesananState extends State<PagePesanan> {
                 }
 
                 // jika data didapatkan
-                if (snapshot.hasData && listProd.isNotEmpty) {
+                if (snapshot.hasData && filteredListProd.isNotEmpty) {
                   return RefreshIndicator(
                     onRefresh: () => _refreshData(context),
                     child: ListView.builder(
-                      itemCount: listProd.length,
+                      itemCount: filteredListProd.length,
                       itemBuilder: (s, index) {
                         return ListCardPesanan(
-                          dataList: listProd[index],
+                          dataList: filteredListProd[index],
                           categories: 'pesanan',
                         );
                       },
