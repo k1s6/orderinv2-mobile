@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TextFieldDetails extends StatelessWidget {
-  const TextFieldDetails({super.key, required this.controller});
+  const TextFieldDetails({super.key, required this.controller, required this.keyboardType});
 
-  final controller;
+  final TextEditingController controller;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -11,6 +12,7 @@ class TextFieldDetails extends StatelessWidget {
       height: 40,
       child: TextField(
           controller: controller,
+          keyboardType: keyboardType,
           textAlignVertical: TextAlignVertical.center,
           // textAlign: TextAlign.center,
           decoration: const InputDecoration(

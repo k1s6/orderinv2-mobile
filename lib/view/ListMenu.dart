@@ -66,7 +66,10 @@ class _ListMenuState extends State<ListMenu>
                     color: Colors.white,
                     child: Padding(
                       padding: const EdgeInsets.all(8),
-                      child: Expanded(child: _tabBar),
+                      child: SizedBox(
+                        height: 44, // Adjust the height as needed
+                        child: _tabBar,
+                      ),
                     ),
                   ),
                 ),

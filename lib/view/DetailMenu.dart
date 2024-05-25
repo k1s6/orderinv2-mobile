@@ -28,6 +28,7 @@ class _DetailMenuState extends State<DetailMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
@@ -39,13 +40,10 @@ class _DetailMenuState extends State<DetailMenu> {
         ),
         // iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: const Color.fromARGB(255, 47, 47, 47),
-        title: const Padding(
-            padding: EdgeInsets.only(left: 50),
-            child: Text(
-              'Tambah Menu',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            )),
+        title: const Text(
+          'Tambah Menu',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
       ),
       body: BodyOfTambahMenu(),
     );
@@ -321,6 +319,7 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
                   Expanded(
                       child: TextFieldDetails(
                     controller: hargaController,
+                    keyboardType: TextInputType.number,
                   )),
                 ],
               )),
@@ -338,6 +337,7 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
                   Expanded(
                       child: TextFieldDetails(
                     controller: descController,
+                    keyboardType: TextInputType.text,
                   )),
                 ],
               )),

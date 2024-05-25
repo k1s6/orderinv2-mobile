@@ -582,6 +582,7 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
                   Expanded(
                       child: TextFieldDetails(
                     controller: hargaController,
+                    keyboardType: TextInputType.number,
                   )),
                 ],
               )),
@@ -599,6 +600,7 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
                   Expanded(
                       child: TextFieldDetails(
                     controller: descController,
+                    keyboardType: TextInputType.text,
                   )),
                 ],
               )),
