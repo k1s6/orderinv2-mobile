@@ -14,6 +14,8 @@ import 'package:orderez/configuration/Constant.dart';
 import 'package:http/http.dart' as http;
 import 'package:orderez/view/ListMenu.dart';
 
+final _formKey = GlobalKey<FormState>();
+
 class EditMenu extends StatefulWidget {
   const EditMenu(
       {super.key,
@@ -484,229 +486,215 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
 
   String categoryValue = "Makanan";
 
+  String? nameValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Nama tidak boleh kosong';
+    } else if (value.length < 2) {
+      return 'Panjang nama minimal 2 karakter';
+    } else if (value.length > 50) {
+      return 'Nama tidak boleh lebih dari 50 karakter';
+    }
+    return null;
+  }
+
+  String? priceValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Harga tidak boleh kosong';
+    } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+      return 'Harga tidak boleh mengandung titik atau koma';
+    } else if (int.parse(value) > 1000000000) {
+      return 'Harga maksimal Rp 1,000,000,000';
+    }
+    return null;
+  }
+
+  String? descValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'deskripsi tidak boleh kosong';
+    } else if (value.length > 250) {
+      return 'deskripsi tidak boleh lebih dari 250 karakter';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     // categoryValue = widget.jenis;
 
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          _imageFile != null
-              ? Image.file(
-                  _imageFile!,
-                  width: 170,
-                  height: 170,
-                  fit: BoxFit.cover,
-                )
-              : imgcheck
-                  ? Icon(
-                      Icons.image,
-                      size: 170,
-                    )
-                  : Image.network(widget.imgplaceholder,
-                      width: 170, height: 170, fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                      // default gambar
-                      return Icon(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            _imageFile != null
+                ? Image.file(
+                    _imageFile!,
+                    width: 170,
+                    height: 170,
+                    fit: BoxFit.cover,
+                  )
+                : imgcheck
+                    ? Icon(
                         Icons.image,
                         size: 170,
-                      );
-                    }),
-          GestureDetector(
-            onTap: () => _pickImage(),
-            child: const Text(
-              'Edit',
-              style: TextStyle(color: Colors.blue),
+                      )
+                    : Image.network(widget.imgplaceholder,
+                        width: 170, height: 170, fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                        // default gambar
+                        return Icon(
+                          Icons.image,
+                          size: 170,
+                        );
+                      }),
+            GestureDetector(
+              onTap: () => _pickImage(),
+              child: const Text(
+                'Edit',
+                style: TextStyle(color: Colors.blue),
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                const Text('status'),
-                const SizedBox(
-                  width: 20,
-                ),
-                Switch(
-                  thumbIcon: thumbIcon,
-                  value: light1,
-                  onChanged: (bool value) {
-                    setState(() {
-                      light1 = value;
-                    });
-                  },
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Text(
-                  light1 ? 'Tersedia' : 'Habis',
-                  style: TextStyle(
-                    color: light1 ? Colors.green : Colors.red,
-                  ),
-                ),
-              ],
+            const SizedBox(
+              height: 20,
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Padding(
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
-                  const Text('nama'),
+                  const Text('status'),
                   const SizedBox(
                     width: 20,
                   ),
-                  Expanded(
-                      child: TextFieldEdit(
-                    controller: nameController,
-                  )),
-                ],
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  const Text('harga'),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                      child: TextFieldDetails(
-                    controller: hargaController,
-                    keyboardType: TextInputType.number,
-                  )),
-                ],
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  const Text('deskripsi'),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                      child: TextFieldDetails(
-                    controller: descController,
-                    keyboardType: TextInputType.text,
-                  )),
-                ],
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                const Text('Jenis'),
-                SizedBox(
-                  width: 20,
-                ),
-                DropdownButton(
-                    items: ListMenuItems,
-                    value: categoryValue,
-                    onChanged: (val) {
+                  Switch(
+                    thumbIcon: thumbIcon,
+                    value: light1,
+                    onChanged: (bool value) {
                       setState(() {
-                        categoryValue = val.toString();
+                        light1 = value;
                       });
-                    }),
-              ],
+                    },
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    light1 ? 'Tersedia' : 'Habis',
+                    style: TextStyle(
+                      color: light1 ? Colors.green : Colors.red,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 170),
-          Row(
-            children: [
-              SizedBox(
-                width: 40,
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    const Text('nama'),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                        child: TextFieldEdit(
+                      controller: nameController,
+                      validator: nameValidator,
+                    )),
+                  ],
+                )),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    const Text('harga'),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                        child: TextFieldDetails(
+                      controller: hargaController,
+                      keyboardType: TextInputType.number,
+                      validator: priceValidator,
+                    )),
+                  ],
+                )),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    const Text('deskripsi'),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                        child: TextFieldEdit(
+                      controller: descController,
+                      validator: descValidator,
+                    )),
+                  ],
+                )),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  const Text('Jenis'),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  DropdownButton(
+                      items: ListMenuItems,
+                      value: categoryValue,
+                      onChanged: (val) {
+                        setState(() {
+                          categoryValue = val.toString();
+                        });
+                      }),
+                ],
               ),
-              GestureDetector(
-                onTap: () => {
-                  // Fluttertoast.showToast(msg: "clicked")
-                  // deleteData(widget.idprod, context)
-                  confirmDeleteData(context, widget.idprod)
-                },
-                child: const ButtonDetailMenu(
-                  color: Colors.red,
-                  btntype: "Hapus",
+            ),
+            SizedBox(height: 170),
+            Row(
+              children: [
+                SizedBox(
+                  width: 40,
                 ),
-              ),
-              Expanded(child: SizedBox()),
-              GestureDetector(
-                onTap: () => {
-                  updateandupload(),
-                },
-                child: const ButtonDetailMenu(
-                  color: Colors.green,
-                  btntype: "Perbarui",
+                GestureDetector(
+                  onTap: () => {
+                    // Fluttertoast.showToast(msg: "clicked")
+                    // deleteData(widget.idprod, context)
+                    confirmDeleteData(context, widget.idprod)
+                  },
+                  child: const ButtonDetailMenu(
+                    color: Colors.red,
+                    btntype: "Hapus",
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: 40,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SliderButton extends StatelessWidget {
-  const SliderButton({Key? key, required this.isSliding, required this.onSlide})
-      : super(key: key);
-
-  final bool isSliding;
-  final ValueChanged<bool> onSlide;
-
-  @override
-  Widget build(BuildContext context) {
-    Color buttonColor = isSliding
-        ? Colors.green
-        : Colors.red; // Warna hijau jika isSliding true, warna merah jika false
-    return GestureDetector(
-      onHorizontalDragUpdate: (details) {
-        double dx = details.localPosition.dx;
-        if (dx < 0) dx = 0;
-        if (dx > 43) dx = 43;
-        double value = dx / 43;
-        onSlide(value > 0.5);
-      },
-      child: Container(
-        width: 43,
-        height: 18,
-        decoration: BoxDecoration(
-          color: isSliding
-              ? const Color.fromARGB(255, 158, 158, 158)
-              : const Color(0xFFD9D9D9),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Stack(
-          children: [
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 200),
-              left: isSliding ? 25 : 0,
-              child: Container(
-                width: 18,
-                height: 18,
-                decoration: BoxDecoration(
-                  color:
-                      buttonColor, // Menggunakan warna sesuai kondisi isSliding
-                  shape: BoxShape.circle,
+                Expanded(child: SizedBox()),
+                GestureDetector(
+                  onTap: () => {
+                    if (_formKey.currentState?.validate() ?? false)
+                      {updateandupload()}
+                  },
+                  child: const ButtonDetailMenu(
+                    color: Colors.green,
+                    btntype: "Perbarui",
+                  ),
                 ),
-              ),
+                SizedBox(
+                  width: 40,
+                ),
+              ],
             ),
           ],
         ),
@@ -714,3 +702,4 @@ class SliderButton extends StatelessWidget {
     );
   }
 }
+

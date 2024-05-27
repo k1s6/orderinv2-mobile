@@ -14,6 +14,40 @@ class DrawerComponent extends StatelessWidget {
 
   // Switch(nums);
 
+  Future<void> confirmLogout(BuildContext context) async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Konfirmasi'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('Apakah Anda yakin ingin logout?'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Batal'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  // Navigator.of(context).pop();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginUser()));
+                },
+                child: Text('Keluar'),
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     var listbool = [false, false];
@@ -91,9 +125,10 @@ class DrawerComponent extends StatelessWidget {
                 title: const Text('Logout'),
                 onTap: () {
                   // Handle logout action
-                  Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginUser()));
+                  confirmLogout(context);
+                  // Navigator.pop(context);
+                  // Navigator.push(context,
+                  //     MaterialPageRoute(builder: (context) => LoginUser()));
                 },
               ),
             ),

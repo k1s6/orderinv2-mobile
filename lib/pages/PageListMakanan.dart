@@ -309,9 +309,11 @@ class _PageMakananState extends State<PageMakanan> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Text(
-                  name,
-                  style: const TextStyle(fontSize: 16.0),
+                Container(
+                  child: Text(
+                    name,
+                    style: const TextStyle(fontSize: 16.0,),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Text(

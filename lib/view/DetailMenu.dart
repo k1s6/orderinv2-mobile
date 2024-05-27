@@ -16,6 +16,8 @@ import 'package:orderez/configuration/Constant.dart';
 import 'package:orderez/view/ListMenu.dart';
 import 'package:http/http.dart' as http;
 
+final _formKey = GlobalKey<FormState>();
+
 class DetailMenu extends StatefulWidget {
   const DetailMenu({super.key});
 
@@ -265,115 +267,157 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
     }
   }
 
+  String? nameValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Nama tidak boleh kosong';
+    } else if (value.length < 2) {
+      return 'Panjang nama minimal 2 karakter';
+    } else if (value.length > 50) {
+      return 'Nama tidak boleh lebih dari 50 karakter';
+    }
+    return null;
+  }
+
+  String? descValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'deskripsi tidak boleh kosong';
+    } else if (value.length > 250) {
+      return 'deskripsi tidak boleh lebih dari 250 karakter';
+    }
+    return null;
+  }
+
+  String? priceValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Harga tidak boleh kosong';
+    } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+      return 'Harga tidak boleh mengandung titik atau koma';
+    } else if (int.parse(value) > 1000000000) {
+      return 'Harga maksimal Rp 1,000,000,000';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          _imageFile != null
-              ? Image.file(
-                  _imageFile!,
-                  width: 170,
-                  height: 170,
-                  fit: BoxFit.cover,
-                )
-              : const Icon(
-                  Icons.image,
-                  size: 170,
-                ),
-          GestureDetector(
-            onTap: () => _pickImage(),
-            child: const Text(
-              'Edit',
-              style: TextStyle(color: Colors.blue),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  const Text('nama'),
-                  const SizedBox(
-                    width: 20,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            _imageFile != null
+                ? Image.file(
+                    _imageFile!,
+                    width: 170,
+                    height: 170,
+                    fit: BoxFit.cover,
+                  )
+                : const Icon(
+                    Icons.image,
+                    size: 170,
                   ),
-                  Expanded(
-                      child: TextFieldEdit(
-                    controller: nameController,
-                  )),
-                ],
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  const Text('harga'),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                      child: TextFieldDetails(
-                    controller: hargaController,
-                    keyboardType: TextInputType.number,
-                  )),
-                ],
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  const Text('deskripsi'),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                      child: TextFieldDetails(
-                    controller: descController,
-                    keyboardType: TextInputType.text,
-                  )),
-                ],
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                const Text('Jenis'),
-                SizedBox(
-                  width: 20,
-                ),
-                DropdownButton(
-                    items: ListMenuItems,
-                    value: categoryValue,
-                    onChanged: (val) {
-                      setState(() {
-                        categoryValue = val.toString();
-                      });
-                    }),
-              ],
-            ),
-          ),
-          SizedBox(height: 200),
-          Center(
-            child: GestureDetector(
-              onTap: () => {uploadandstore()},
-              child: const ButtonDetailMenu(
-                color: Colors.blue,
-                btntype: "Tambah",
+            GestureDetector(
+              onTap: () => _pickImage(),
+              child: const Text(
+                'Edit',
+                style: TextStyle(color: Colors.blue),
               ),
             ),
-          )
-        ],
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('nama'),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: TextFieldEdit(
+                      controller: nameController,
+                      validator: nameValidator,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('harga'),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                        child: TextFieldDetails(
+                      controller: hargaController,
+                      keyboardType: TextInputType.number,
+                      validator: priceValidator,
+                    )),
+                  ],
+                )),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('deskripsi'),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                        child: TextFieldEdit(
+                      controller: descController,
+                      validator: descValidator,
+                    )),
+                  ],
+                )),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  const Text('Jenis'),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  DropdownButton(
+                      items: ListMenuItems,
+                      value: categoryValue,
+                      onChanged: (val) {
+                        setState(() {
+                          categoryValue = val.toString();
+                        });
+                      }),
+                ],
+              ),
+            ),
+            SizedBox(height: 200),
+            Center(
+              child: GestureDetector(
+                onTap: () => {
+                  if (_formKey.currentState?.validate() ?? false)
+                    {uploadandstore()}
+                },
+                child: const ButtonDetailMenu(
+                  color: Colors.blue,
+                  btntype: "Tambah",
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
