@@ -13,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 100), () {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (_) => LoginUser()));
     });
@@ -38,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
             padding: const EdgeInsets.only(top: 230.0), // Atur jarak dari atas
             child: CircularProgressIndicator.adaptive(
               valueColor: AlwaysStoppedAnimation<Color>(
-                Color.fromARGB(255, 95, 95, 95),
+                Color(0xCDF49315),
               ),
             ),
           ),

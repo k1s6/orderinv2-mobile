@@ -295,7 +295,12 @@ class _PageMinumanState extends State<PageMinuman> {
                 const SizedBox(height: 10),
                 Text(
                   name,
-                  style: const TextStyle(fontSize: 16.0),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                 ),
                 const SizedBox(height: 10),
                 Text(
