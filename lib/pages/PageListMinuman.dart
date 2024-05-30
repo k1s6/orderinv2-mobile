@@ -43,6 +43,16 @@ class _PageMinumanState extends State<PageMinuman> {
 
   bool isDataNotEmpty = true;
 
+  Future<void> _refreshData(BuildContext context) async {
+    setState(() {
+      // Reset listProd and isDataNotEmpty before fetching new data
+      listProd.clear();
+      isDataNotEmpty = true;
+      getDataProduct(context);
+    });
+    // await showData(context);
+  }
+
   Future<void> getDataProduct(BuildContext context) async {
     final String apiUrl = '${OrderinAppConstant.productgetURL}/minuman';
 
@@ -57,7 +67,6 @@ class _PageMinumanState extends State<PageMinuman> {
           List<dynamic> data = responseData['data'];
 
           listProd = data.map((item) => Product.fromJson(item)).toList();
-          
         } else if (responseData['status'] == 'fail') {
           print(responseData['message']);
           isDataNotEmpty = false;
@@ -71,7 +80,7 @@ class _PageMinumanState extends State<PageMinuman> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Failed Get Data'),
-            content: Text('error 02'),
+            content: Text('Server Error'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -208,31 +217,49 @@ class _PageMinumanState extends State<PageMinuman> {
 
                 // jika data didapatkan
                 if (snapshot.hasData && listProd.isNotEmpty) {
-                  return GridView.count(
-                    padding: const EdgeInsets.all(5),
-                    crossAxisCount: 2,
-                    children: listProd.map(
-                      (drink) {
-                        return _buildCard(
-                          drink.kodeProduct.toString(),
-                          drink.namaProduct ?? '',
-                          drink.hargaProduct.toString(),
-                          drink.gambarProduct ?? '',
-                          drink.stockProduct ?? '',
-                          drink.descProduct ?? '',
-                        );
-                      },
-                    ).toList(),
+                  return RefreshIndicator(
+                    onRefresh: () => _refreshData(context),
+                    child: GridView.count(
+                      padding: const EdgeInsets.all(5),
+                      crossAxisCount: 2,
+                      children: listProd.map(
+                        (drink) {
+                          return _buildCard(
+                            drink.kodeProduct.toString(),
+                            drink.namaProduct ?? '',
+                            drink.hargaProduct.toString(),
+                            drink.gambarProduct ?? '',
+                            drink.stockProduct ?? '',
+                            drink.descProduct ?? '',
+                          );
+                        },
+                      ).toList(),
+                    ),
                   );
                 } else {
                   // jika data tidak ditemukan
-                  return Center(
-                    child: Text(
-                      isDataNotEmpty ? 'Something Wrong' : 'Tidak Ada Data',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  return RefreshIndicator(
+                    onRefresh: () => _refreshData(context),
+                    child: ListView(
+                      children: [
+                        Container(
+                          height: 270,
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  isDataNotEmpty
+                                      ? 'Something Wrong'
+                                      : 'Tidak Ada Data',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ]),
+                        ),
+                      ],
                     ),
                   );
                 }

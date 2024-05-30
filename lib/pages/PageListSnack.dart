@@ -40,6 +40,17 @@ class _PageSnackState extends State<PageSnack> {
       findclicked = true;
     });
   }
+
+  Future<void> _refreshData(BuildContext context) async {
+    setState(() {
+      // Reset listProd and isDataNotEmpty before fetching new data
+      listProd.clear();
+      isDataNotEmpty = true;
+      getDataProduct(context);
+    });
+    // await showData(context);
+  }
+
   // @override
   // void initState() {
   //   super.initState();
@@ -220,31 +231,49 @@ class _PageSnackState extends State<PageSnack> {
 
                 // jika data didapatkan
                 if (snapshot.hasData && listProd.isNotEmpty) {
-                  return GridView.count(
-                    padding: const EdgeInsets.all(5),
-                    crossAxisCount: 2,
-                    children: listProd.map(
-                      (drink) {
-                        return _buildCard(
-                          drink.kodeProduct.toString(),
-                          drink.namaProduct ?? '',
-                          drink.hargaProduct.toString(),
-                          drink.gambarProduct ?? '',
-                          drink.stockProduct ?? '',
-                          drink.descProduct ?? '',
-                        );
-                      },
-                    ).toList(),
+                  return RefreshIndicator(
+                    onRefresh: () => _refreshData(context),
+                    child: GridView.count(
+                      padding: const EdgeInsets.all(5),
+                      crossAxisCount: 2,
+                      children: listProd.map(
+                        (drink) {
+                          return _buildCard(
+                            drink.kodeProduct.toString(),
+                            drink.namaProduct ?? '',
+                            drink.hargaProduct.toString(),
+                            drink.gambarProduct ?? '',
+                            drink.stockProduct ?? '',
+                            drink.descProduct ?? '',
+                          );
+                        },
+                      ).toList(),
+                    ),
                   );
                 } else {
                   // jika data tidak ditemukan
-                  return Center(
-                    child: Text(
-                      isDataNotEmpty ? 'Something Wrong' : 'Tidak Ada Data',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  return RefreshIndicator(
+                    onRefresh: () => _refreshData(context),
+                    child: ListView(
+                      children: [
+                        Container(
+                          height: 270,
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  isDataNotEmpty
+                                      ? 'Something Wrong'
+                                      : 'Tidak Ada Data',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ]),
+                        ),
+                      ],
                     ),
                   );
                 }
