@@ -5,6 +5,8 @@ import 'dart:developer';
 import 'package:d_method/d_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:orderez/Widget/ListTileComponent.dart';
 import 'package:orderez/Widget/ListCardPesanan.dart';
 import 'package:orderez/configuration/Constant.dart';
@@ -134,26 +136,40 @@ class _PagePesananState extends State<PagePesanan> {
         children: [
           Padding(
             padding: EdgeInsets.all(12),
-            child: TextField(
-              controller: searchController,
-              textAlignVertical: TextAlignVertical.center,
-              // textAlign: TextAlign.center,
-              decoration: const InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                prefixIcon: Icon(Icons.search),
-                hintText: "Cari Nama Pelanggan",
-                fillColor: Color.fromARGB(255, 245, 245, 245),
-                filled: true,
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black)),
-              ),
-              onChanged: (value) {
-                filterSearchResults(value);
-              },
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: searchController,
+                    textAlignVertical: TextAlignVertical.center,
+                    // textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                      prefixIcon: Icon(Icons.search),
+                      hintText: "Cari Nama Pelanggan",
+                      fillColor: Color.fromARGB(255, 245, 245, 245),
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)),
+                    ),
+                    onChanged: (value) {
+                      filterSearchResults(value);
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                GestureDetector(
+                  onTap: () => showDialog(
+                      context: context, builder: (context) => const SortingDialog()),
+                  child: const Icon(Icons.sort_sharp),
+                ),
+              ],
             ),
           ),
           Expanded(
@@ -231,6 +247,35 @@ class _PagePesananState extends State<PagePesanan> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class SortingDialog extends StatefulWidget {
+  const SortingDialog({super.key});
+
+  @override
+  State<SortingDialog> createState() => SortingDialogState();
+}
+
+class SortingDialogState extends State<SortingDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return const Dialog(
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('this is list of sorting'),
+            Text('this is list of sorting'),
+            Text('this is list of sorting'),
+            Text('this is list of sorting'),
+            Text('this is list of sorting'),
+          ],
+        ),
       ),
     );
   }
