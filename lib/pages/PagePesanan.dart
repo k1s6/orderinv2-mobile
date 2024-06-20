@@ -26,6 +26,13 @@ class _PagePesananState extends State<PagePesanan> {
   late List<Transaksi> listProd = [];
   late List<Transaksi> filteredListProd = [];
   late Future<void> _dataFuture;
+  bool isDescending = false;
+
+  void updateSortOrder(bool descending) {
+    setState(() {
+      isDescending = descending;
+    });
+  }
 
   bool isDataNotEmpty = true;
   TextEditingController searchController = TextEditingController();
@@ -166,8 +173,15 @@ class _PagePesananState extends State<PagePesanan> {
                 ),
                 GestureDetector(
                   onTap: () => showDialog(
-                      context: context, builder: (context) => const SortingDialog()),
-                  child: const Icon(Icons.sort_sharp),
+                      context: context,
+                      builder: (context) => SortingDialog(
+                          initialSortOrder: isDescending,
+                          onSortOrderChanged: updateSortOrder)),
+                  child: Image.asset(
+                    'lib/images/sorting.png',
+                    height: 40,
+                  ),
+                  // const Icon(Icons.sort_sharp),
                 ),
               ],
             ),
@@ -209,8 +223,12 @@ class _PagePesananState extends State<PagePesanan> {
                     child: ListView.builder(
                       itemCount: filteredListProd.length,
                       itemBuilder: (s, index) {
+                        final items = isDescending
+                            ? filteredListProd.reversed.toList()
+                            : filteredListProd;
+
                         return ListCardPesanan(
-                          dataList: filteredListProd[index],
+                          dataList: items[index],
                           categories: 'pesanan',
                         );
                       },
@@ -253,27 +271,73 @@ class _PagePesananState extends State<PagePesanan> {
 }
 
 class SortingDialog extends StatefulWidget {
-  const SortingDialog({super.key});
+  final bool initialSortOrder;
+  final void Function(bool) onSortOrderChanged;
+
+  const SortingDialog(
+      {super.key,
+      required this.initialSortOrder,
+      required this.onSortOrderChanged});
 
   @override
   State<SortingDialog> createState() => SortingDialogState();
 }
 
+List<String> options = ["Option 1", "Option 2"];
+
 class SortingDialogState extends State<SortingDialog> {
+  late bool currentOptions;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    currentOptions = widget.initialSortOrder;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Dialog(
+    return Dialog(
       child: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('this is list of sorting'),
-            Text('this is list of sorting'),
-            Text('this is list of sorting'),
-            Text('this is list of sorting'),
-            Text('this is list of sorting'),
+            Center(
+              child: Text(
+                "Urutkan",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            RadioListTile(
+                title: const Text("Pesanan Pertama"),
+                value: false,
+                groupValue: currentOptions,
+                onChanged: (value) {
+                  setState(() {
+                    currentOptions = false;
+                  });
+                  widget.onSortOrderChanged(false);
+                  Navigator.pop(context);
+                }),
+            RadioListTile(
+                title: const Text("Pesanan Terakhir"),
+                value: true,
+                groupValue: currentOptions,
+                onChanged: (value) {
+                  setState(() {
+                    currentOptions = true;
+                  });
+                  widget.onSortOrderChanged(true);
+                  Navigator.pop(context);
+                })
           ],
         ),
       ),
