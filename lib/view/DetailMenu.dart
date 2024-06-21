@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -112,9 +114,14 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
         if (responseData['status'] == 'success') {
           // Jika response success eksekusi kode dibawah
 
-          Fluttertoast.showToast(msg: 'data berhasil diupload');
+          // var snackbarmsg = const SnackBar(
+          //   content: Text('Menu Successfully Added'),
+          // );
 
-          Timer(Duration(seconds: 2), () {
+          // ScaffoldMessenger.of(context).showSnackBar(snackbarmsg);
+          showSnackbarCustom(context);
+
+          Timer(const Duration(seconds: 4), () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -296,6 +303,89 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
       return 'Harga maksimal Rp 1,000,000,000';
     }
     return null;
+  }
+
+// =============== Snackbar Here ==================
+  static void showSnackbarCustom(BuildContext context) {
+    final snackBar = SnackBar(
+      /// need to set following properties for best effect of awesome_snackbar_content
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Sukses!',
+        message: 'Menu Berhasil Diupload!',
+
+        /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+        contentType: ContentType.success,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  showScackbarCustom2(BuildContext context) {
+    final snackbarmsg = SnackBar(
+      content: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+              padding: EdgeInsets.all(16),
+              height: 90,
+              decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 48,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Success',
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                        Text(
+                          'Menu Successfully Added',
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )),
+          Positioned(
+            bottom: 0,
+            child: ClipRRect(
+              borderRadius:
+                  const BorderRadius.only(bottomLeft: Radius.circular(20)),
+              child: SvgPicture.asset(
+                'lib/images/bubbles.svg',
+                color: Colors.greenAccent,
+                height: 48,
+                width: 40,
+              ),
+            ),
+          ),
+          Positioned(
+              left: 0,
+              top: -20,
+              child: SvgPicture.asset(
+                'lib/images/fail.svg',
+                color: Colors.greenAccent,
+                height: 40,
+              ))
+        ],
+      ),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    );
+
+    return ScaffoldMessenger.of(context).showSnackBar(snackbarmsg);
   }
 
   @override
