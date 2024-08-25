@@ -317,7 +317,7 @@ class SortingDialogState extends State<SortingDialog> {
               height: 10,
             ),
             RadioListTile(
-                title: const Text("Pesanan Pertama"),
+                title: const Text("Pesanan Terlama"),
                 value: false,
                 groupValue: currentOptions,
                 onChanged: (value) {
@@ -328,7 +328,7 @@ class SortingDialogState extends State<SortingDialog> {
                   Navigator.pop(context);
                 }),
             RadioListTile(
-                title: const Text("Pesanan Terakhir"),
+                title: const Text("Pesanan Terbaru"),
                 value: true,
                 groupValue: currentOptions,
                 onChanged: (value) {

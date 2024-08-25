@@ -19,6 +19,13 @@ class _PageBatalkanState extends State<PageBatalkan> {
   late List<Transaksi> listProd = [];
   late List<Transaksi> filteredListProd = [];
   late Future<void> _dataFuture;
+  bool isDescending = false;
+
+  void updateSortOrder(bool descending) {
+    setState(() {
+      isDescending = descending;
+    });
+  }
 
   bool isDataNotEmpty = true;
   TextEditingController searchController = TextEditingController();
@@ -128,26 +135,47 @@ class _PageBatalkanState extends State<PageBatalkan> {
         children: [
           Padding(
             padding: EdgeInsets.all(12),
-            child: TextField(
-              controller: searchController,
-              textAlignVertical: TextAlignVertical.center,
-              // textAlign: TextAlign.center,
-              decoration: const InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                prefixIcon: Icon(Icons.search),
-                hintText: "Cari Nama Pelanggan",
-                fillColor: Color.fromARGB(255, 245, 245, 245),
-                filled: true,
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black)),
-              ),
-              onChanged: (value) {
-                filterSearchResults(value);
-              },
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: searchController,
+                    textAlignVertical: TextAlignVertical.center,
+                    // textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                      prefixIcon: Icon(Icons.search),
+                      hintText: "Cari Nama Pelanggan",
+                      fillColor: Color.fromARGB(255, 245, 245, 245),
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)),
+                    ),
+                    onChanged: (value) {
+                      filterSearchResults(value);
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                GestureDetector(
+                  onTap: () => showDialog(
+                      context: context,
+                      builder: (context) => SortingDialog(
+                          initialSortOrder: isDescending,
+                          onSortOrderChanged: updateSortOrder)),
+                  child: Image.asset(
+                    'lib/images/sorting.png',
+                    height: 40,
+                  ),
+                  // const Icon(Icons.sort_sharp),
+                ),
+              ],
             ),
           ),
           Expanded(
@@ -187,9 +215,13 @@ class _PageBatalkanState extends State<PageBatalkan> {
                     child: ListView.builder(
                       itemCount: filteredListProd.length,
                       itemBuilder: (s, index) {
+                        final items = isDescending
+                            ? filteredListProd.reversed.toList()
+                            : filteredListProd;
+
                         return ListCardPesanan(
-                          dataList: filteredListProd[index],
-                          categories: 'batalkan',
+                          dataList: items[index],
+                          categories: 'tolak',
                         );
                       },
                     ),
@@ -225,6 +257,81 @@ class _PageBatalkanState extends State<PageBatalkan> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class SortingDialog extends StatefulWidget {
+  final bool initialSortOrder;
+  final void Function(bool) onSortOrderChanged;
+
+  const SortingDialog(
+      {super.key,
+      required this.initialSortOrder,
+      required this.onSortOrderChanged});
+
+  @override
+  State<SortingDialog> createState() => SortingDialogState();
+}
+
+List<String> options = ["Option 1", "Option 2"];
+
+class SortingDialogState extends State<SortingDialog> {
+  late bool currentOptions;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    currentOptions = widget.initialSortOrder;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Text(
+                "Urutkan",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            RadioListTile(
+                title: const Text("Pesanan Terlama"),
+                value: false,
+                groupValue: currentOptions,
+                onChanged: (value) {
+                  setState(() {
+                    currentOptions = false;
+                  });
+                  widget.onSortOrderChanged(false);
+                  Navigator.pop(context);
+                }),
+            RadioListTile(
+                title: const Text("Pesanan Terbaru"),
+                value: true,
+                groupValue: currentOptions,
+                onChanged: (value) {
+                  setState(() {
+                    currentOptions = true;
+                  });
+                  widget.onSortOrderChanged(true);
+                  Navigator.pop(context);
+                })
+          ],
+        ),
       ),
     );
   }
