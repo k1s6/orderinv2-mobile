@@ -133,61 +133,68 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
         } else {
           // Jika upload data gagal, dapatkan pesan error
           String errorMessage = responseData['message'];
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('Upload Data Gagal'),
-                content: Text(responseData['message']),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
+          showSnackbarCustomFail(context, "gagal");
+          // showDialog(
+          //   context: context,
+          //   builder: (BuildContext context) {
+          //     return AlertDialog(
+          //       title: Text('Upload Data Gagal'),
+          //       content: Text(responseData['message']),
+          //       actions: <Widget>[
+          //         TextButton(
+          //           onPressed: () {
+          //             Navigator.of(context).pop();
+          //           },
+          //           child: Text('OK'),
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // );
         }
       } else {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Upload Data Gagal'),
-              content: Text('error 01'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
+        final responseData = json.decode(response.body);
+        String errorMessage = responseData['message'];
+        showSnackbarCustomFail(context, '$errorMessage');
+
+        // showDialog(
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     return AlertDialog(
+        //       title: Text('Upload Data Gagal'),
+        //       content: Text('error'),
+        //       actions: <Widget>[
+        //         TextButton(
+        //           onPressed: () {
+        //             Navigator.of(context).pop();
+        //           },
+        //           child: Text('OK'),
+        //         ),
+        //       ],
+        //     );
+        //   },
+        // );
       }
     } catch (e) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Upload Data Gagal'),
-            content: Text('error 02'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
+      // showDialog(
+      //   context: context,
+      //   builder: (BuildContext context) {
+      //     return AlertDialog(
+      //       title: Text('Upload Data Gagal'),
+      //       content: Text('error 02'),
+      //       actions: <Widget>[
+      //         TextButton(
+      //           onPressed: () {
+      //             Navigator.of(context).pop();
+      //           },
+      //           child: Text('OK'),
+      //         ),
+      //       ],
+      //     );
+      //   },
+      // );
+      showSnackbarCustomFail(
+          context, "Gagal, pastikan koneksi internet anda stabil");
     }
   }
 
@@ -212,20 +219,20 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
         // Check status in the response
         if (responseData['status'] == 'success') {
           // If response success, execute code below
-          Fluttertoast.showToast(msg: 'Data berhasil diupload');
+          // Fluttertoast.showToast(msg: 'Gambar Produk Berhasil diupload');
           setState(() {
             this._imgName = responseData['name'];
           });
         } else {
           // Handle other cases when status is not success
-          Fluttertoast.showToast(msg: 'Gagal mengupload data');
+          // Fluttertoast.showToast(msg: 'Gagal mengupload gambar produk');
         }
       } else {
         // Handle other status codes
-        Fluttertoast.showToast(msg: 'Gagal mengupload data');
+        Fluttertoast.showToast(msg: 'Error upload Image');
       }
     } else {
-      Fluttertoast.showToast(msg: "No image selected");
+      // Fluttertoast.showToast(msg: "Tidak ada gambar yang dipilih");
       setState(() {
         this._imgName = "null";
       });
@@ -318,6 +325,24 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
 
         /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
         contentType: ContentType.success,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  static void showSnackbarCustomFail(BuildContext context, String msg) {
+    final snackBar = SnackBar(
+      /// need to set following properties for best effect of awesome_snackbar_content
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Gagal!',
+        message: '$msg',
+
+        /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+        contentType: ContentType.failure,
       ),
     );
 

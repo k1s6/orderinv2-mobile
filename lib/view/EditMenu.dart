@@ -13,6 +13,7 @@ import 'package:orderez/Widget/TextFieldEdit.dart';
 import 'package:orderez/configuration/Constant.dart';
 import 'package:http/http.dart' as http;
 import 'package:orderez/view/ListMenu.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -174,7 +175,8 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
         if (responseData['status'] == 'success') {
           // Jika response success eksekusi kode dibawah
 
-          Fluttertoast.showToast(msg: 'data berhasil diubah');
+          // Fluttertoast.showToast(msg: 'data berhasil diubah');
+          showSnackbarCustom(context);
 
           Timer(Duration(seconds: 2), () {
             Navigator.pushReplacement(
@@ -185,64 +187,32 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
                       )),
             );
           });
-        } else {
-          // Jika upload data gagal, dapatkan pesan error
-          String errorMessage = responseData['message'];
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('Update Data Gagal'),
-                content: Text(responseData['message']),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
         }
       } else {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Update Data Gagal'),
-              content: Text('error 01'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
+        // showDialog(
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     return AlertDialog(
+        //       title: Text('Update Data Gagal'),
+        //       content: Text('error 01'),
+        //       actions: <Widget>[
+        //         TextButton(
+        //           onPressed: () {
+        //             Navigator.of(context).pop();
+        //           },
+        //           child: Text('OK'),
+        //         ),
+        //       ],
+        //     );
+        //   },
+        // );
+        final responseData = json.decode(response.body);
+        String errorMessage = responseData['message'];
+        showSnackbarCustomFail(context, '$errorMessage');
       }
     } catch (e) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Update Data Gagal'),
-            content: Text('error 02'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
+      showSnackbarCustomFail(
+          context, "Gagal, pastikan koneksi internet anda stabil");
     }
   }
 
@@ -300,35 +270,34 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
 
           Fluttertoast.showToast(msg: 'data berhasil dihapus');
 
+          int initIndex = 0;
+
+          switch (categoryValue) {
+            case "Makanan":
+              initIndex = 0;
+              break;
+            case "Minuman":
+              initIndex = 1;
+              break;
+            case "Snack":
+              initIndex = 2;
+              break;
+            case "Steak":
+              initIndex = 3;
+              break;
+            default:
+              initIndex = 0;
+          }
+
           Timer(Duration(seconds: 2), () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => ListMenu(
-                        initialTabIndex: 1,
+                        initialTabIndex: initIndex,
                       )),
             );
           });
-        } else {
-          // Jika upload data gagal, dapatkan pesan error
-          String errorMessage = responseData['message'];
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('Update Data Gagal'),
-                content: Text(responseData['message']),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
         }
       } else {
         showDialog(
@@ -410,21 +379,18 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
         // Check status in the response
         if (responseData['status'] == 'success') {
           // If response success, execute code below
-          Fluttertoast.showToast(msg: 'Gambar berhasil terunggah');
+          // Fluttertoast.showToast(msg: 'Gambar berhasil terunggah');
           setState(() {
             this._imgName = responseData['name'];
           });
-        } else {
-          // Handle other cases when status is not success
-          Fluttertoast.showToast(msg: 'Gagal mengupload data');
         }
       } else {
         // Handle other status codes
-        Fluttertoast.showToast(msg: 'Gagal mengupload data');
+        Fluttertoast.showToast(msg: 'Gambar gagal diubah');
       }
     } else {
       String imageName = getImageNameFromUrl(widget.imgplaceholder);
-      Fluttertoast.showToast(msg: "Gambar tidak diubah");
+      // Fluttertoast.showToast(msg: "Gambar tidak diubah");
       setState(() {
         this._imgName = imageName;
       });
@@ -484,7 +450,7 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
     ),
   ];
 
-  String categoryValue = "Makanan";
+  static String categoryValue = "Makanan";
 
   String? nameValidator(String? value) {
     if (value == null || value.isEmpty) {
@@ -515,6 +481,42 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
       return 'deskripsi tidak boleh lebih dari 250 karakter';
     }
     return null;
+  }
+
+  static void showSnackbarCustom(BuildContext context) {
+    final snackBar = SnackBar(
+      /// need to set following properties for best effect of awesome_snackbar_content
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Sukses!',
+        message: 'Menu Berhasil Diupdate!',
+
+        /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+        contentType: ContentType.success,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  static void showSnackbarCustomFail(BuildContext context, String msg) {
+    final snackBar = SnackBar(
+      /// need to set following properties for best effect of awesome_snackbar_content
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Gagal!',
+        message: '$msg',
+
+        /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+        contentType: ContentType.failure,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -702,4 +704,3 @@ class _BodyOfEditMenu extends State<BodyOfEditMenu> {
     );
   }
 }
-
