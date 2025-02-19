@@ -6,6 +6,7 @@ import 'package:orderez/pages/PageBatalkan.dart';
 import 'package:orderez/pages/PageKonfirmasi.dart';
 import 'package:orderez/view/ListMenu.dart';
 import 'package:orderez/pages/PagePesanan.dart';
+import 'package:orderez/pages/PageSelesai.dart';
 
 class Pesanan extends StatefulWidget {
   const Pesanan({super.key});
@@ -17,9 +18,10 @@ class Pesanan extends StatefulWidget {
 class _PesananState extends State<Pesanan> {
   TabBar get _tabBar => const TabBar(
         tabs: [
-          Tab(text: 'Diterima'),
-          Tab(text: 'Dibatalkan'),
-          Tab(text: 'Dikonfirmasi'),
+          Tab(text: 'Menuggu'),
+          Tab(text: 'Diproses'),
+          Tab(text: 'Ditolak'),
+          Tab(text: 'Selesai')
         ],
         labelColor: Colors.black,
         indicatorColor: Colors.black,
@@ -33,7 +35,7 @@ class _PesananState extends State<Pesanan> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -55,8 +57,9 @@ class _PesananState extends State<Pesanan> {
           drawer: DrawerComponent(nums: 1),
           body: const TabBarView(children: [
             PagePesanan(),
-            PageBatalkan(),
             PageKonfirmasi(),
+            PageBatalkan(),
+            PageSelesai(),
           ]),
         ),
       ),
