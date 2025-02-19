@@ -3,6 +3,7 @@ import 'package:orderez/Widget/ListTileComponent.dart';
 import 'package:orderez/view/ListMenu.dart';
 import 'package:orderez/view/LoginUser.dart';
 import 'package:orderez/view/Pesanan.dart';
+import 'package:orderez/view/Laporan.dart';
 
 class DrawerComponent extends StatelessWidget {
   const DrawerComponent({
@@ -112,6 +113,17 @@ class DrawerComponent extends StatelessWidget {
                     name: 'List Menu',
                     icons: Icon(Icons.menu_book_rounded),
                     destination: ListMenu(
+                      initialTabIndex: 0,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  ListtilComponent(
+                    selected: listbool[1], 
+                    name: 'Laporan', 
+                    icons: Icon(Icons.folder_rounded), 
+                    destination: Laporan(
                       initialTabIndex: 0,
                     ),
                   ),
