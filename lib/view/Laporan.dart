@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:orderez/Widget/DrawerComponent.dart';
+import 'package:orderez/Widget/ListTileComponent.dart';
 import 'package:orderez/theme.dart';
+import 'package:orderez/pages/PageLaporanPenjualan.dart';
+import 'package:orderez/pages/PageBestSeller.dart';
 
 class Laporan extends StatefulWidget {
   final int initialTabIndex;
@@ -13,6 +17,18 @@ class Laporan extends StatefulWidget {
 }
 
 class _LaporanState extends State<Laporan>{
+  TabBar get _tabBar => const TabBar(
+    tabs: [
+      Tab(text: 'Laporan Penjualan'),
+      Tab(text: 'Menu Best Seller')
+    ],
+    labelColor: Colors.black,
+        indicatorColor: Colors.black,
+        unselectedLabelStyle:
+            TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        unselectedLabelColor: Colors.black87,
+        labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+    );
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,10 +45,31 @@ class _LaporanState extends State<Laporan>{
               style:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
+            bottom: PreferredSize(
+              preferredSize: _tabBar.preferredSize,
+              child: Material(
+                color: const Color.fromARGB(255, 255, 206, 64),
+                child: _tabBar,
+              ),
+            ),
           ),
-          drawer: DrawerComponent(nums: 1),
+          drawer: DrawerComponent(nums: 3),
+          body: TabBarView(
+            children: [
+            PageLaporanPenjualan(),
+            PageBestSeller(),
+          ]),
           ),
       ),
     );
+  }
+}
+
+class PlaceholderPage extends StatelessWidget {
+  const PlaceholderPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text('placeholder');
   }
 }

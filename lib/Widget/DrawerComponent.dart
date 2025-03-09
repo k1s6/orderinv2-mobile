@@ -51,7 +51,7 @@ class DrawerComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var listbool = [false, false];
+    var listbool = [false, false, false];
 
     listbool[nums - 1] = true;
 
@@ -120,7 +120,7 @@ class DrawerComponent extends StatelessWidget {
                     height: 4,
                   ),
                   ListtilComponent(
-                    selected: listbool[1], 
+                    selected: listbool[2], 
                     name: 'Laporan', 
                     icons: Icon(Icons.folder_rounded), 
                     destination: Laporan(
