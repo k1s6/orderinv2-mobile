@@ -32,12 +32,17 @@ class _PageBestSellerState extends State<PageBestSeller> {
                     border: Border.all(color: Colors.black),
                   ),
                   child: DropdownButtonHideUnderline(
+                    child: Center(
                     child: DropdownButton<String>(
+                      isExpanded: true,
                       value: selectedCategory,
                       items: ["Makanan", "Minuman", "Snack", "Steak"].map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value),
+                          alignment: AlignmentDirectional.center,
+                          child: Center(
+                            child: Text(value)
+                            ),
                         );
                       }).toList(),
                       onChanged: (String? newValue) {
@@ -45,7 +50,7 @@ class _PageBestSellerState extends State<PageBestSeller> {
                           selectedCategory = newValue!;
                         });
                       },
-                    ),
+                    ),),
                   ),
                 ),
               ],

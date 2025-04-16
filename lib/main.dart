@@ -12,6 +12,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:orderez/view/Pesanan.dart';
 import 'package:orderez/view/splashscreen.dart';
+import 'package:orderez/view/Laporan.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: ListMenu(initialTabIndex: 0,),
-      home: SplashScreen()
+      home: Laporan(initialTabIndex: 0)
     );
   }
 }

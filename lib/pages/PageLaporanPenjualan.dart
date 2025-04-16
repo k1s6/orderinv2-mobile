@@ -125,7 +125,7 @@ class _PageLaporanPenjualanState extends State<PageLaporanPenjualan> {
         margin: EdgeInsets.symmetric(horizontal: 4),
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.amber[200],
+          color: Colors.amber,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Column(
