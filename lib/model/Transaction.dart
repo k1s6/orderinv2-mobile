@@ -7,17 +7,17 @@ Transaksi transaksiFromJson(String str) => Transaksi.fromJson(json.decode(str));
 String transaksiToJson(Transaksi data) => json.encode(data.toJson());
 
 class Transaksi {
-  int kodeTransaksi;
-  String nama;
-  String status;
-  String jumlah;
+  final int kodeTransaksi;
+  final String nama;
+  final String status;
+  final int jumlah;
   // int jumlah;
-  String total;
+  final String total;
   // int total;
-  String? catatan;
-  DateTime createdAt;
-  DateTime updatedAt;
-  List<Detail> details;
+  final String? catatan;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final List<Detail> details;
 
   Transaksi({
     required this.kodeTransaksi,
@@ -35,8 +35,9 @@ class Transaksi {
         kodeTransaksi: json["kode_transaksi"],
         nama: json["nama"],
         status: json["status"],
-        jumlah: json["jumlah"],
-        total: json["total"],
+        jumlah:
+            json["jumlah"] is int ? json["jumlah"] : int.parse(json["jumlah"]),
+        total: json["total"].toString(),
         catatan: json["catatan"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
@@ -79,12 +80,13 @@ class Detail {
   });
 
   factory Detail.fromJson(Map<String, dynamic> json) => Detail(
-        kodeTransaksi: json["kode_transaksi"],
+        kodeTransaksi: json["kode_transaksi"].toString(),
         // kodeProduct: json["kode_product"],
         namaProduct: json["nama_product"],
-        jumlah: json["jumlah"],
-        harga: json["harga"],
-        total: json["total"],
+        jumlah:
+            json["jumlah"] is int ? json["jumlah"].toString() : json["jumlah"],
+        harga: json["harga"].toString(),
+        total: json["total"].toString(),
         // product: Product.fromJson(json["product"]),
       );
 

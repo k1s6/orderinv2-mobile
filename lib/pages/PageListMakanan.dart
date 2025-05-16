@@ -89,6 +89,8 @@ class _PageMakananState extends State<PageMakanan> {
         }
       }
     } catch (e) {
+      print(e);
+      
       showDialog(
         context: context,
         builder: (BuildContext context) {
