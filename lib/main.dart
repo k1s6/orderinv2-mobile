@@ -14,8 +14,13 @@ import 'package:orderez/firebase_options.dart';
 import 'package:orderez/view/Pesanan.dart';
 import 'package:orderez/view/splashscreen.dart';
 import 'package:orderez/view/Laporan.dart';
+import 'package:intl/date_symbol_data_local.dart'; // Import for locale initialization
+import 'pages/PageLaporanPenjualan.dart'; // Import your page
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting(
+      'id_ID', null); // Initialize locale for Indonesian
   runApp(const MyApp());
 }
 
