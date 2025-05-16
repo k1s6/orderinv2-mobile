@@ -5,13 +5,14 @@ import 'package:orderez/koneksi/ListPage.dart';
 import 'package:orderez/utils/Utils.dart';
 import 'package:orderez/view/ListMenu.dart';
 import 'package:orderez/view/Login.dart';
+import 'package:orderez/view/Login2.dart';
 import 'package:orderez/view/LoginUser.dart';
 // import 'package:orderez/koneksi/Lis';
 import 'package:orderez/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:orderez/view/Pesanan.dart';
-import 'package:orderez/view/splashscreen.dart';
+import 'package:orderez/view/Splashscreen.dart';
 import 'package:orderez/view/Laporan.dart';
 
 void main() {
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       ),
       // home: ListMenu(initialTabIndex: 0,),
       home: Laporan(initialTabIndex: 0)
+      // home: SplashScreen()
     );
   }
 }
