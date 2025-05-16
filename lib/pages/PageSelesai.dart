@@ -37,7 +37,7 @@ class _PageSelesaiState extends State<PageSelesai> {
   }
 
   Future<void> showData(BuildContext context) async {
-    final String apiUrl = '${OrderinAppConstant.getdataTransaction}/ditolak';
+    final String apiUrl = '${OrderinAppConstant.getdataTransaction}/selesai';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
