@@ -11,30 +11,26 @@ class Laporan extends StatefulWidget {
 
   const Laporan({super.key, required this.initialTabIndex});
 
-
   @override
   State<Laporan> createState() => _LaporanState();
 }
 
-class _LaporanState extends State<Laporan>{
+class _LaporanState extends State<Laporan> {
   TabBar get _tabBar => const TabBar(
-    tabs: [
-      Tab(text: 'Laporan Penjualan'),
-      Tab(text: 'Menu Best Seller')
-    ],
-    labelColor: Colors.black,
+        tabs: [Tab(text: 'Laporan Penjualan'), Tab(text: 'Menu Best Seller')],
+        labelColor: Colors.black,
         indicatorColor: Colors.black,
         unselectedLabelStyle:
             TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
         unselectedLabelColor: Colors.black87,
         labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-    );
+      );
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
-        length: 4,
+        length: 2,
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -54,12 +50,11 @@ class _LaporanState extends State<Laporan>{
             ),
           ),
           drawer: DrawerComponent(nums: 3),
-          body: TabBarView(
-            children: [
+          body: TabBarView(children: [
             PageLaporanPenjualan(),
             PageBestSeller(),
           ]),
-          ),
+        ),
       ),
     );
   }

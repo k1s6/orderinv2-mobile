@@ -7,6 +7,7 @@ Transaksi transaksiFromJson(String str) => Transaksi.fromJson(json.decode(str));
 String transaksiToJson(Transaksi data) => json.encode(data.toJson());
 
 class Transaksi {
+  
   final int kodeTransaksi;
   final String nama;
   final String status;
@@ -59,15 +60,15 @@ class Transaksi {
 }
 
 class Detail {
-  String kodeTransaksi;
-  // int kodeTransaksi;
-  String namaProduct;
-  String jumlah;
-  // int jumlah;
-  String harga;
-  // int harga;
-  String total;
-  // int total;
+  final String kodeTransaksi;
+   // int kodeTransaksi;
+  final String namaProduct;
+  final String jumlah;
+   // int jumlah;
+  final String harga;
+   // int harga;
+  final String total;
+   // int total;
 
   Detail({
     required this.kodeTransaksi,

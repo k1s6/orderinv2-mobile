@@ -176,6 +176,7 @@ class _BodyOfTambahMenuState extends State<BodyOfTambahMenu> {
         // );
       }
     } catch (e) {
+      print(e);
       // showDialog(
       //   context: context,
       //   builder: (BuildContext context) {
