@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         // home: ListMenu(initialTabIndex: 0,),
-        home: Laporan(initialTabIndex: 0)
+        home: Pesanan()
         // home: SplashScreen()
         );
   }
