@@ -1,14 +1,10 @@
 import 'dart:convert';
-import 'dart:math';
-import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:orderez/configuration/Constant.dart';
 import 'package:orderez/model/Transaction.dart';
-import 'package:orderez/view/ListMenu.dart';
-
-import 'package:http/http.dart' as http;
 
 class ListCardPesanan extends StatelessWidget {
   const ListCardPesanan(
@@ -109,8 +105,12 @@ class SecondPageDialog extends StatefulWidget {
 }
 
 class _SecondPageDialogState extends State<SecondPageDialog> {
+  final ScrollController _scrollController = ScrollController();
+
   Future<void> updateTransaksi(
       String status, String kode, BuildContext context) async {
+    final BuildContext navigatorContext = Navigator.of(context).context; // Gunakan context dari Navigator
+
     final String apiUrl = '${OrderinAppConstant.updateTransaction}/${kode}';
 
     try {
@@ -121,6 +121,7 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
           "status": status,
         }, // raw body
       );
+      print(response.body);
 
       // Periksa status code respons dari server
       if (response.statusCode == 200) {
@@ -129,15 +130,29 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
 
         // Periksa status dalam respons
         if (responseData['status'] == 'success') {
-          // Jika response success eksekusi kode dibawah
-          status == "dikonfirmasi"
-              ? Fluttertoast.showToast(msg: 'transaksi diterima!')
-              : Fluttertoast.showToast(msg: 'transaksi ditolak');
+          
+          // Gunakan Builder untuk memastikan konteks berada di dalam Scaffold
+          Builder(
+            builder: (BuildContext scaffoldContext) {
+              ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    status == "dikonfirmasi"
+                        ? 'Transaksi diterima!'
+                        : 'Transaksi ditolak',
+                  ),
+                  backgroundColor: Colors.green,
+                  duration: Duration(seconds: 2),
+                ),
+              );
+              return SizedBox.shrink(); // Placeholder untuk Builder
+            },
+          );
         } else {
           // Jika upload data gagal, dapatkan pesan error
           String errorMessage = responseData['message'];
           showDialog(
-            context: context,
+            context: navigatorContext, // Gunakan context dari Navigator
             builder: (BuildContext context) {
               return AlertDialog(
                 title: Text('Update Data Gagal'),
@@ -156,7 +171,7 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
         }
       } else {
         showDialog(
-          context: context,
+          context: navigatorContext, // Gunakan context dari Navigator
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text('Update Data Gagal'),
@@ -174,8 +189,9 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
         );
       }
     } catch (e) {
+      print('Error: $e');
       showDialog(
-        context: context,
+        context: navigatorContext, // Gunakan context dari Navigator
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Update Data Gagal'),
@@ -198,6 +214,12 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
       TextEditingController(text: widget.dataList.catatan);
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Dialog(
       child: SizedBox(
@@ -218,16 +240,19 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
               ),
             ],
           ),
-          body: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+          body: Scrollbar(
+            controller: _scrollController,
+            thumbVisibility: true,
+            child: ListView(
+              controller: _scrollController,
+              padding: EdgeInsets.zero, // Hilangkan padding default ListView
               children: [
                 LayoutBuilder(
                   builder: (context, constraints) {
                     return ConstrainedBox(
                       constraints: BoxConstraints(
                         minHeight: 0,
-                        maxHeight: 300,
+                        maxHeight: 600,
                       ),
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 10),
@@ -235,37 +260,55 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
                           thumbVisibility: true,
                           child: SingleChildScrollView(
                             child: DataTable(
+                              
                               border: TableBorder(
                                 horizontalInside:
                                     BorderSide(width: 1, color: Colors.grey),
                               ),
-                              columns: const [
-                                DataColumn(label: Text('nama')),
-                                DataColumn(
-                                  label: Align(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      'jumlah',
-                                      textAlign: TextAlign.end,
-                                    ),
-                                  ),
-                                  numeric: true,
-                                ),
-                              ],
                               rows: widget.dataList.details.map((e) {
                                 return DataRow(cells: [
-                                  DataCell(Text(e.namaProduct ?? '')),
                                   DataCell(
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        'Rp ${e.harga} x ${e.jumlah}',
-                                        textAlign: TextAlign.end,
-                                      ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(e.namaProduct ?? ''),
+                                            ),
+                                            Text(
+                                              'Rp. ${e.harga} x ${e.jumlah}',
+                                              textAlign: TextAlign.end,
+                                            ),
+                                          ],
+                                        ),
+                                        if (e.catatan != null && e.catatan!.isNotEmpty)
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 4.0),
+                                            child: Text(
+                                              'catatan : ${e.catatan}',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ),
+                                      ],
                                     ),
                                   ),
                                 ]);
                               }).toList(),
+                              columns: const [
+                                DataColumn(
+                                  label: Text(
+                                    'Pesanan',
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                                
+                              ],
                             ),
                           ),
                         ),
@@ -318,40 +361,31 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Scrollbar(
-                        thumbVisibility: true,
-                        // trackVisibility: true,
-                        child: TextField(
-                            readOnly: true,
-                            controller: _controller,
-                            obscureText: false,
-                            maxLines: 3,
-                            decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              enabledBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
-                              focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 0, 0, 0)),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
-                              // prefixIcon: widget.icon,
-                              // suffixIcon: widget.hinttxt == "Password"
-                            )),
-                      ),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Scrollbar(
+                    thumbVisibility: true,
+                    child: TextField(
+                        readOnly: true,
+                        controller: _controller,
+                        obscureText: false,
+                        maxLines: 3,
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 0, 0, 0)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                        )),
+                  ),
                 ),
-                Expanded(
-                  child: SizedBox(),
-                ),
+                const SizedBox(height: 20), // Tambahkan jarak sebelum tombol
                 Row(
                   children: [
                     Padding(
@@ -426,12 +460,12 @@ class _SecondPageDialogState extends State<SecondPageDialog> {
                     ),
                   ],
                 ),
-                Padding(padding: EdgeInsets.only(bottom: 30), child: SizedBox())
+                const SizedBox(height: 30), // Tambahkan jarak setelah tombol
               ],
             ),
           ),
         ),
-      ),
+      )
     );
   }
 }

@@ -1,19 +1,12 @@
 import 'dart:convert';
-import 'dart:math';
-import 'dart:developer';
 
-import 'package:d_method/d_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:orderez/Widget/ListTileComponent.dart';
+import 'package:http/http.dart' as http;
 import 'package:orderez/Widget/ListCardPesanan.dart';
 import 'package:orderez/configuration/Constant.dart';
-import 'package:orderez/model/Product.dart';
 import 'package:orderez/model/Transaction.dart';
-import 'package:orderez/view/LoginUser.dart';
-import 'package:http/http.dart' as http;
 
 class PagePesanan extends StatefulWidget {
   const PagePesanan({super.key});
@@ -49,62 +42,37 @@ class _PagePesananState extends State<PagePesanan> {
     try {
       final response = await http.get(Uri.parse(apiUrl));
 
-      DMethod.log('CALL SHOW DATA');
-
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
-        DMethod.log('RESPONSE CODE IS 200');
-
         if (responseData['status'] == 'success') {
-          DMethod.log('CALL STATUS');
-          // tampilkan data
-          List<dynamic> data = responseData['data'];
-
-          // listProd = data.map((item) => Transaksi.fromJson(item)).toList();
-          // filteredListProd = listProd;
-
-          // if (listProd.length == 0) {
-          //   isDataNotEmpty = false;
-          // }
           setState(() {
-            listProd = data.map((item) => Transaksi.fromJson(item)).toList();
+            listProd = responseData['data']
+                .map<Transaksi>((item) => Transaksi.fromJson(item))
+                .toList();
             filteredListProd = listProd;
             isDataNotEmpty = listProd.isNotEmpty;
           });
-
-          for (var trx in listProd) {
-            DMethod.log('DATA -> ${trx.nama}');
-          }
-
-          // log(listProd);
-        } else if (responseData['status'] == 'fail') {
-          DMethod.log('CALL FAIL');
-          DMethod.log(responseData['message']);
-          isDataNotEmpty = false;
         } else {
-          DMethod.log('DATA GAGAL');
-          DMethod.log('data gagal di dapat');
+          Fluttertoast.showToast(
+            msg: "Gagal mendapatkan data: ${responseData['message']}",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+          );
+          setState(() {
+            isDataNotEmpty = false;
+          });
         }
       }
     } catch (e) {
-      // print(e);
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Failed Get Data'),
-            content: Text('error 02'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
+      Fluttertoast.showToast(
+        msg: "Terjadi kesalahan: $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
       );
     }
   }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:orderez/Widget/DrawerComponent.dart';
+import 'package:orderez/pages/PageListMakanan.dart';
 import 'package:orderez/pages/PageListMinuman.dart';
 import 'package:orderez/pages/PageListSnack.dart';
 import 'package:orderez/pages/PageListSteak.dart';
 import 'package:orderez/theme.dart';
 import 'package:orderez/view/DetailMenu.dart';
-import 'package:orderez/pages/PageListMakanan.dart';
 
 class ListMenu extends StatefulWidget {
   final int initialTabIndex;
@@ -77,10 +77,50 @@ class _ListMenuState extends State<ListMenu>
             ),
             drawer: DrawerComponent(nums: 2),
             body: TabBarView(controller: _tabController, children: [
-              PageMakanan(),
-              PageMinuman(),
-              PageSnack(),
-              PageSteak()
+              PageMakanan(
+                onShowMessage: (String message) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+              ),
+              PageMinuman(
+                onShowMessage: (String message) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+              ),
+              PageSnack(
+                onShowMessage: (String message) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+              ),
+              PageSteak(
+                onShowMessage: (String message) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+              ),
             ]),
             floatingActionButton: FloatingActionButton(
                 focusColor: Colors.yellow,

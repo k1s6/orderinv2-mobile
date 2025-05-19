@@ -1,23 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:orderez/koneksi/Firestoreget.dart';
-import 'package:orderez/koneksi/ListPage.dart';
-import 'package:orderez/utils/Utils.dart';
-import 'package:orderez/view/ListMenu.dart';
-import 'package:orderez/view/Login.dart';
-import 'package:orderez/view/Login2.dart';
-import 'package:orderez/view/LoginUser.dart';
-// import 'package:orderez/koneksi/Lis';
-import 'package:orderez/firebase_options.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:orderez/view/Pesanan.dart';
-import 'package:orderez/view/splashscreen.dart';
-import 'package:orderez/view/Laporan.dart';
 import 'package:intl/date_symbol_data_local.dart'; // Import for locale initialization
-import 'pages/PageLaporanPenjualan.dart'; // Import your page
+import 'package:orderez/view/ListMenu.dart';
 
 void main() async {
+  debugDefaultTargetPlatformOverride = TargetPlatform.android;
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting(
       'id_ID', null); // Initialize locale for Indonesian
@@ -38,7 +26,9 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         // home: ListMenu(initialTabIndex: 0,),
-        home: Pesanan()
+        home: ListMenu(
+          initialTabIndex: 0, // Tambahkan parameter initialTabIndex
+        )
         // home: SplashScreen()
         );
   }

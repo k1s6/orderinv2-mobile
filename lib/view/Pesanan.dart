@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:orderez/Widget/DrawerComponent.dart';
-import 'package:orderez/Widget/ListTileComponent.dart';
 import 'package:orderez/pages/PageBatalkan.dart';
-import 'package:orderez/pages/PageKonfirmasi.dart';
-import 'package:orderez/view/ListMenu.dart';
 import 'package:orderez/pages/PagePesanan.dart';
 import 'package:orderez/pages/PageSelesai.dart';
 
@@ -19,7 +15,7 @@ class _PesananState extends State<Pesanan> {
   TabBar get _tabBar => const TabBar(
         tabs: [
           Tab(text: 'Menuggu'),
-          Tab(text: 'Diproses'),
+          // Tab(text: 'Diproses'),
           Tab(text: 'Ditolak'),
           Tab(text: 'Selesai')
         ],
@@ -35,7 +31,7 @@ class _PesananState extends State<Pesanan> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
-        length: 4,
+        length: 3,
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -57,7 +53,7 @@ class _PesananState extends State<Pesanan> {
           drawer: DrawerComponent(nums: 1),
           body: const TabBarView(children: [
             PagePesanan(),
-            PageKonfirmasi(),
+            // PageKonfirmasi(),
             PageBatalkan(),
             PageSelesai(),
           ]),

@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:d_method/d_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:orderez/Widget/ListCardPesanan.dart';
 import 'package:orderez/configuration/Constant.dart';
 import 'package:orderez/model/Transaction.dart';
-import 'package:http/http.dart' as http;
 
 class PageSelesai extends StatefulWidget {
   const PageSelesai({super.key});
@@ -37,7 +37,7 @@ class _PageSelesaiState extends State<PageSelesai> {
   }
 
   Future<void> showData(BuildContext context) async {
-    final String apiUrl = '${OrderinAppConstant.getdataTransaction}/selesai';
+    final String apiUrl = '${OrderinAppConstant.getdataTransaction}/dikonfirmasi';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
