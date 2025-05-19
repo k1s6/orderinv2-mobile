@@ -18,6 +18,7 @@ class _PageLaporanPenjualanState extends State<PageLaporanPenjualan> {
   int totalItemsSoldToday = 0; // Variable to store the total items sold today
   int pembeliHariini = 0;
   int pemasukanHariIni = 0;
+  int pendapatanTahun = 0;
 
   @override
   void initState() {
@@ -94,12 +95,12 @@ class _PageLaporanPenjualanState extends State<PageLaporanPenjualan> {
                     Icon(Icons.account_balance_wallet, size: 30),
                     SizedBox(height: 8),
                     Text(
-                      'Pendapatan',
+                      'Pendapatan per Tahun ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 8),
                     Text(
-                      'Rp 9.832.000',
+                      'Rp  $pendapatanTahun',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
@@ -210,6 +211,7 @@ class _PageLaporanPenjualanState extends State<PageLaporanPenjualan> {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        pendapatanTahun = int.parse(data['pendapatanTahun']);
 
         if (data is Map<String, dynamic> && data.containsKey('data')) {
           List<dynamic> items = data['data']; // Extract the list from 'data'
@@ -221,16 +223,19 @@ class _PageLaporanPenjualanState extends State<PageLaporanPenjualan> {
           for (var item in items) {
             // Extract necessary fields
             String name = item['nama'] ?? 'Unknown';
-            String imageUrl = '${OrderinAppConstant.gambar}${item['gambar_product']}';
+            String imageUrl =
+                '${OrderinAppConstant.gambar}${item['gambar_product']}';
             int jumlah = item['jumlah'] ?? 0;
             int total = item['total'] ?? 0;
             DateTime createdAt = DateTime.parse(item['created_at']);
             String day = DateFormat('EEEE', 'id_ID').format(createdAt); // Day
-            String date = DateFormat('d MMMM yyyy', 'id_ID').format(createdAt); // Date
+            String date =
+                DateFormat('d MMMM yyyy', 'id_ID').format(createdAt); // Date
             String time = DateFormat('HH:mm:ss').format(createdAt); // Time
 
             // Add item to the list
-            newListItems.add(_listItemWithImage(name, imageUrl, '$day, $date', time));
+            newListItems
+                .add(_listItemWithImage(name, imageUrl, '$day, $date', time));
 
             // Increment counters
             itemCount += jumlah;
@@ -257,7 +262,8 @@ class _PageLaporanPenjualanState extends State<PageLaporanPenjualan> {
   }
 
   // Widget for list item with image
-  Widget _listItemWithImage(String name, String imageUrl, String date, String time) {
+  Widget _listItemWithImage(
+      String name, String imageUrl, String date, String time) {
     return Card(
       elevation: 2,
       child: ListTile(
@@ -267,7 +273,8 @@ class _PageLaporanPenjualanState extends State<PageLaporanPenjualan> {
           height: 50,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
-            return Icon(Icons.broken_image, size: 50); // Fallback for broken images
+            return Icon(Icons.broken_image,
+                size: 50); // Fallback for broken images
           },
         ),
         title: Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
